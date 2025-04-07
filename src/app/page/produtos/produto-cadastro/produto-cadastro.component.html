@@ -1,0 +1,201 @@
+<main>
+  <p-card styleClass="card-adjust">
+    <div class="mb-3">
+      <span class="title colorTitle">Cadastro de Produtos</span>
+    </div>
+
+    <div class="flex justify-content-start mb-2">
+      <button
+        pButton
+        type="button"
+        class="p-button-primary"
+        icon="pi pi-arrow-left"
+        pTooltip="Voltar"
+        routerLink="/produtos"
+      ></button>
+    </div>
+
+
+    <form #formProduto="ngForm" (ngSubmit)="salvar(formProduto)">
+      <div class="grid flex flex-wrap justify-content-center">
+        <div class="col-12 md:col-6 lg:col-3">
+          <span>Nome</span>
+          <input
+            type="text"
+            name="nome"
+            #name="ngModel"
+            [(ngModel)]="produtos.nome"
+            pInputText
+            class="w-full"
+            [required]="true"
+            minlength="2"
+            maxlength="60"
+            [pKeyFilter]="regex.stringNumber"
+            upperCase
+          />
+
+          <app-message
+            [control]="name"
+            error="required"
+            text="Nome é obrigatório..."
+          ></app-message>
+          <app-message
+            [control]="name"
+            error="minlength"
+            text="Mínimo de 2 caracteres..."
+          ></app-message>
+          <app-message
+            [control]="name"
+            error="maxlength"
+            text="Máximo de 60 caracteres..."
+          ></app-message>
+        </div>
+
+        <!-- <div class="col-12 md:col-6 lg:col-3">
+          <span>Descrição</span>
+          <input
+            type="text"
+            name="descricao"
+            #name="ngModel"
+            [(ngModel)]="produtos.descricao"
+            pInputText
+            class="w-full"
+            [required]="true"
+            minlength="2"
+            maxlength="60"
+            [pKeyFilter]="regex.stringNumber"
+            upperCase
+          />
+        </div> -->
+         <div class="col-12 md:col-6 lg:col-3">
+          <span>SKU</span>
+          <input
+            type="text"
+            name="sku"
+            #name="ngModel"
+            [(ngModel)]="produtos.sku"
+            pInputText
+            class="w-full"
+            [required]="true"
+            minlength="2"
+            maxlength="60"
+            [pKeyFilter]="regex.stringNumber"
+          />
+        </div>
+        <!-- <div class="col-12 md:col-6 lg:col-3">
+          <span>Preço</span>
+          <p-inputNumber
+            mode="currency"
+            currency="BRL"
+            placeholder="0,00"
+            ngModel
+            name="valor"
+            #valor="ngModel"
+            [required]="true"
+            [(ngModel)]="produtos.preco"
+          ></p-inputNumber>
+        </div> -->
+        <!-- <div class="col-12 md:col-6 lg:col-3">
+          <span>Categoria</span>
+          <p-dropdown
+            styleClass="dropdown"
+            name="operador"
+            [autoDisplayFirst]="false"
+            #operador="ngModel"
+            filter="true"
+            [options]="categorias"
+            [virtualScroll]="true"
+            [itemSize]="30"
+            optionLabel="label"
+            [(ngModel)]="selectedCategoria"
+            placeholder="Selecione..."
+            [emptyFilterMessage]="messageDrop"
+            [showClear]="true"
+            required
+          ></p-dropdown>
+        </div> -->
+
+        <!-- <div class="p-grid p-fluid">
+          <div class="p-col-12 p-md-6">
+            <h3>Upload de Foto do Produto</h3>
+
+            <form (ngSubmit)="onSubmit()">
+              <div class="p-field">
+                <label for="descricao">Descrição da Foto</label>
+                <input
+                  type="text"
+                  pInputText
+                  [(ngModel)]="descricao"
+                  name="descricao"
+                  required
+                />
+              </div>
+
+              <div class="p-field">
+                <label for="foto">Selecione a Foto</label>
+                <p-fileUpload
+                  name="file"
+                  customUpload="true"
+                  (uploadHandler)="onUpload($event)"
+                  accept="image/*"
+                  mode="basic"
+                  auto="true"
+                  chooseLabel="Escolher Foto"
+                ></p-fileUpload>
+              </div>
+
+              <div class="p-field">
+                <button
+                  pButton
+                  type="submit"
+                  label="Salvar Foto"
+                  icon="pi pi-save"
+                ></button>
+              </div>
+            </form>
+          </div>
+        </div> -->
+      </div>
+      
+      <div class="flex justify-content-center">
+        <div class="flex align-items-center justify-content-center">
+          <h3>Status</h3>
+        </div>
+      </div>
+
+      <!-- <div class="flex justify-content-center">
+        <div class="flex align-items-center justify-content-center">
+          <p-inputSwitch
+            [(ngModel)]="produtos.status"
+            name="status"
+            [ngModelOptions]="{ standalone: true }"
+          ></p-inputSwitch>
+        </div>
+      </div> -->
+      <div class="flex flex-wrap justify-content-center mt-4">
+        <div class="col-12 md:col-6 lg:col-3">
+          <button
+            pButton
+            type="submit"
+            class="p-button-primary w-full"
+            icon="pi pi-save"
+            [disabled]="formProduto.invalid || salvando"
+            pTooltip="Salvar"
+            label="Salvar"
+          ></button>
+        </div>
+      </div>
+      <div *ngIf="salvando" class="grid flex justify-content-center mt-4">
+        <p-progressSpinner
+          [style]="{ width: '50px', heigth: '50px' }"
+          styleClass="custom-spinner"
+          strokeWidth="8"
+          animation=".5s"
+        ></p-progressSpinner>
+        <div class="grid col-12 justify-content-center">
+          <h4>Salvando aguarde...</h4>
+        </div>
+      </div>
+    </form>
+  </p-card>
+</main>

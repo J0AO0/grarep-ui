@@ -1,0 +1,289 @@
+<header>
+  <!-- <img [src]="logo" height="45" alt="Logo LabsRad" routerLink="/" /> -->
+  <p-avatarGroup class="perfil">
+    <div class="login">
+      <i class="pi pi-user user"></i>
+      <a>{{ auth.jwtPayload?.user_name }}</a>
+
+      <button
+        class="seta-botao-menor"
+        pButton
+        icon="pi pi-angle-down"
+        type="button"
+        (click)="overlay.toggle($event)"
+      ></button>
+
+      <p-overlayPanel #overlay>
+        <ul class="menu-items">
+          <li *ngFor="let item of items" (click)="item.command()">
+            <i [class]="item.icon"></i> {{ item.label }}
+          </li>
+        </ul>
+      </p-overlayPanel>
+    </div>
+    <p-avatar
+      class="perfill"
+      icon="pi pi-user"
+      styleClass="mr-2"
+      pTooltip="Perfil"
+      tooltipPosition="left"
+      [style]="{ 'background-color': '#5790ab', color: '#ffffff' }"
+      (click)="userdetails.toggle($event)"
+      shape="circle"
+    >
+    </p-avatar>
+
+    <p-avatar
+      icon="pi pi-cart-arrow-down"
+      styleClass="p-mr-4"
+      pTooltip="Carrinho"
+      tooltipPosition="left"
+      [style]="{
+        'background-color': '#5790ab',
+        color: '#ffffff',
+        'margin-right': '12px'
+      }"
+      shape="circle"
+    >
+    </p-avatar>
+  </p-avatarGroup>
+</header>
+<div
+  class="menu"
+  (click)="menu = true"
+  pTooltip="Menu"
+  tooltipPosition="bottom"
+>
+  <i
+    class="pi pi-bars text-black-alpha-90"
+    style="font-size: 18px; color: white"
+  ></i>
+</div>
+<div class="home" routerLink="/" pTooltip="Início" tooltipPosition="bottom">
+  <i
+    class="pi pi-home text-black-alpha-90"
+    style="font-size: 20px; color: white"
+  ></i>
+</div>
+
+<p-sidebar [(visible)]="menu" [baseZIndex]="10000">
+  <br />
+  <br />
+
+  <div class="div-sidebar">
+    <button
+      pButton
+      type="button"
+      class="p-button-text btn-sidebar-width alias"
+      tooltipPosition="right"
+      (click)="showEmpresas()"
+    >
+      <i style="color: rgb(255, 255, 255)" class="pi pi-external-link"></i>
+      <span
+        class="ml-2 p-text-nowrap p-text-truncate"
+        pTooltip="{{ razaosocial }}"
+        tooltipPosition="right"
+      >
+        {{ idEmpresaativa }}- {{ razaosocial }}</span
+      >
+    </button>
+  </div>
+
+  <p-accordion styleClass="mt-3">
+    <button
+      pButton
+      type="button"
+      class="ui-button-rounded btn-menu"
+      routerLinkActive="ativo"
+      icon="fas fa-clipboard-check"
+      (click)="menu = false"
+      [disabled]="!auth.temPermissao('R_EMP')"
+      label="Empresas"
+      routerLink="/empresas"
+    ></button>
+
+    <!-- Menu de Categoria Inicio -->
+    <!-- <button
+      pButton
+      type="button"
+      class="ui-button-rounded btn-menu"
+      routerLinkActive="ativo"
+      icon="fas fa-list"
+      (click)="menu = false"
+      ngForm="!auth.temPermissao('R_CAT')"
+      label="Categoria"
+      routerLink="/categorias"
+    ></button> -->
+    <!-- Menu de Produto Inicio -->
+    <button
+      pButton
+      type="button"
+      class="ui-button-rounded btn-menu"
+      routerLinkActive="ativo"
+      icon="fas fa-bag-shopping"
+      (click)="menu = false"
+      ngForm="!auth.temPermissao('R_PROD')"
+      label="Produto"
+      routerLink="/produtos"
+    ></button>
+    <!-- Menu de Pedido Inicio -->
+    <button
+      pButton
+      type="button"
+      class="ui-button-rounded btn-menu"
+      routerLinkActive="ativo"
+      icon="fas fa-bag-shopping"
+      (click)="menu = false"
+      ngForm="!auth.temPermissao('R_PEDI')"
+      label="Pedido"
+      routerLink="/pedidos"
+    ></button>
+    <!-- Menu de Condição Pagamento Inicio -->
+    <!-- <button
+      pButton
+      type="button"
+      class="ui-button-rounded btn-menu"
+      routerLinkActive="ativo"
+      icon="fas fa-money-bill"
+      (click)="menu = false"
+      ngForm="!auth.temPermissao('R_COND')"
+      label="Condição de Pagamento"
+      routerLink="/condpagamentos"
+    ></button> -->
+    <!-- Menu de Forma de Pagamento Inicio -->
+    <!-- <button
+      pButton
+      type="button"
+      class="ui-button-rounded btn-menu"
+      routerLinkActive="ativo"
+      icon="fas fa-credit-card"
+      (click)="menu = false"
+      ngForm="!auth.temPermissao('R_FORMA')"
+      label="Forma de Pagamento"
+      routerLink="/formapagamentos"
+    ></button> -->
+    <!-- Menu de Tipo de Frete Inicio -->
+    <!-- <button
+      pButton
+      type="button"
+      class="ui-button-rounded btn-menu"
+      routerLinkActive="ativo"
+      icon="fas fa-truck-fast"
+      (click)="menu = false"
+      ngForm="!auth.temPermissao('R_FRETE')"
+      label="Tipo de Frete"
+      routerLink="/tipofretes"
+    ></button> -->
+        <!-- Menu de Tipo de Pedido Inicio -->
+        <!-- <button
+        pButton
+        type="button"
+        class="ui-button-rounded btn-menu"
+        routerLinkActive="ativo"
+        icon="fas fa-truck-fast"
+        (click)="menu = false"
+        ngForm="!auth.temPermissao('R_TIPOPEDIDO')"
+        label="Tipo de Pedido"
+        routerLink="/tipopedidos"
+      ></button> -->
+        <!-- Menu de Relatorios Inicio -->
+    <button
+    pButton
+    type="button"
+    class="ui-button-rounded btn-menu"
+    routerLinkActive="ativo"
+    icon="fas fa-truck-fast"
+    (click)="menu = false"
+    ngForm="!auth.temPermissao('R_REL')"
+    label="Relatorio"
+    routerLink="/relatorios"
+  ></button>
+
+    <button
+      pButton
+      type="button"
+      class="ui-button-rounded btn-menu"
+      routerLinkActive="ativo"
+      icon="fas fa-users-cog"
+      (click)="menu = false"
+      [disabled]="!auth.temPermissao('R_USU')"
+      label="Usuários"
+      routerLink="/usuarios"
+    ></button>
+  </p-accordion>
+  <!-- Fim  -->
+
+  <!--  <div class="logo">
+    <a class="cursor-pointer" href="" target="_blank">
+      <img [src]="logoDescricao" height="45" alt="Logo LabsDev"></a>
+  </div>
+  <div>
+    <h1 class="versao">versão: {{env.version}}</h1>
+  </div> -->
+</p-sidebar>
+
+<p-overlayPanel #userdetails>
+  <div class="logado">
+    <span>Logado:</span>
+    <p>{{ auth.jwtPayload?.user_name }}</p>
+    <br />
+  </div>
+  <button
+    pButton
+    class="p-button-text btnSenha"
+    icon="fas fa-lock"
+    label="Alterar Senha"
+    routerLink="/alterarsenha"
+  ></button>
+  <button
+    pButton
+    class="p-button-text btnSenha"
+    icon="pi pi-chevron-right"
+    label="Sair"
+    (click)="confirmarLogout(sair)"
+  ></button>
+</p-overlayPanel>
+
+<!-- DIALOG DE ESCOLHA DE EMPRESAS -->
+<p-dialog
+  header="Empresas"
+  styleClass="mydialog"
+  [(visible)]="displayEmpresas"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <p-table
+    [columns]="colsEmpresa"
+    [value]="empresas"
+    [loading]="loading"
+    responsive="true"
+  >
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th></th>
+        <th *ngFor="let col of columns">
+          {{ col.header }}
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns" let-empresa>
+      <tr>
+        <td>
+          <button
+            pButton
+            pRipple
+            type="button"
+            label="Selecionar"
+            (click)="selecionaEmpresa(empresa.id)"
+          ></button>
+        </td>
+        <td *ngFor="let col of columns">
+          <span class="p-column-title">{{ col.header }}:</span>
+          {{ rowData[col.field] }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <ng-template pTemplate="footer"> </ng-template>
+</p-dialog>

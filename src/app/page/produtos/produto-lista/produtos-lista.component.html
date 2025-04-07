@@ -1,0 +1,433 @@
+<main>
+  <p-card styleClass="card-adjust p-mt-5 p-mx-3">
+    <h4>PRODUTOS</h4>
+    <div class="flex justify-content-between mb-2">
+      <div class="flex justify-content-start mb-2">
+        <div>
+          <button
+            pButton
+            pRipple
+            type="button"
+            class="p-button-raised p-button-primary"
+            icon="pi pi-plus"
+            pTooltip="Novo"
+            tooltipPosition="top"
+            routerLink="/produtos/novo"
+          ></button>
+        </div>
+        <div>
+          <button
+            pButton
+            pRipple
+            type="button"
+            class="p-button-raised ml-2"
+            pTooltip="Atualizar"
+            tooltipPosition="top"
+            icon="pi pi-refresh"
+            (click)="refresh()"
+          ></button>
+        </div>
+      </div>
+      <div>
+        <p-splitButton
+          styleClass="p-button-primary"
+          #ua
+          label="Opções"
+          icon="pi pi-cog"
+          (onClick)="ua.onDropdownButtonClick(null)"
+          [model]="items"
+        ></p-splitButton>
+      </div>
+    </div>
+
+    <p-table
+      #tabela
+      styleClass="p-datatable-striped p-datatable-gridlines"
+      [columns]="cols"
+      [value]="produtos"
+      [rowsPerPageOptions]="rowsPerPageTable"
+      [rowHover]="true"
+      [showCurrentPageReport]="true"
+      (onLazyLoad)="changePage($event)"
+      selectionMode="single"
+      [(selection)]="selectedProduto"
+      [reorderableColumns]="true"
+      [rows]="filtro.itensPorPagina"
+      [lazy]="true"
+      [totalRecords]="totalRegistros"
+      responsiveLayout="scroll"
+    >
+      <!-- Inpute pesquisa Incio -->
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th class="btnEditar">&nbsp;</th>
+          <th
+            *ngFor="let cols of columns"
+            [pSortableColumn]="cols.field"
+            [ngStyle]="{ 'min-width': cols.width }"
+          >
+            {{ cols.header }}
+          </th>
+
+          <th style="min-width: 150px">Status</th>
+        </tr>
+
+        <tr>
+          <th class="btnEditar">&nbsp;</th>
+          <th
+            *ngFor="let cols of columns; let i = index"
+            [ngStyle]="{ 'min-width': cols.width }"
+          >
+            <form #formFiltro="ngForm" autocomplete="off">
+              <div
+                *ngIf="cols.type !== 'date'"
+                class="flex p-2"
+                [ngStyle]="{ 'min-width': cols.width }"
+              >
+                <input
+                  pInputText
+                  class="p-text-nowrap p-text-truncate mr-2 w-full"
+                  placeholder="Pesquisar"
+                  type="text"
+                  name="pesquisa{{ i }}"
+                  [(ngModel)]="cols.qty"
+                  validateQuantity
+                  #qtyInput
+                  (keyup)="search(cols)"
+                  (blur)="applySearch(cols)"
+                  pTooltip="Pesquisa nessa coluna"
+                  tooltipPosition="top"
+                />
+              </div>
+              <div
+                *ngIf="cols.type === 'date' && cols.field === 'datagravacao'"
+                class="flex p-2"
+                [ngStyle]="{ 'min-width': cols.width }"
+              >
+                <p-overlayPanel #dataGravacao>
+                  <ng-template pTemplate>
+                    <div
+                      class="grid flex justify-content-center align-items-center"
+                    >
+                      <div class="col-1">
+                        <span class="spanDeAte">De</span>
+                      </div>
+
+                      <div class="col-5">
+                        <input
+                          pInputText
+                          matInput
+                          mask="d0/M0/0000"
+                          placeholder="00/00/0000"
+                          name="dtgravacaode"
+                          (keyup)="searchData('datagravacaode')"
+                          (blur)="searchData('datagravacaode')"
+                          type="tel"
+                          class="w-full"
+                          [dropSpecialCharacters]="false"
+                          [(ngModel)]="datagravacaode"
+                          #dtgravacaode="ngModel"
+                          minlength="10"
+                        />
+                        <app-message
+                          [control]="dtgravacaode"
+                          error="minlength"
+                          text="Digite uma data completa"
+                        >
+                        </app-message>
+                      </div>
+                      <div class="col-1">
+                        <span class="spanDeAte">Até</span>
+                      </div>
+                      <div class="col-5">
+                        <input
+                          pInputText
+                          matInput
+                          mask="d0/M0/0000"
+                          placeholder="00/00/0000"
+                          name="dtgravacaoate"
+                          (keyup)="searchData('datagravacaoate')"
+                          (blur)="searchData('datagravacaoate')"
+                          type="tel"
+                          class="w-full"
+                          [(ngModel)]="datagravacaoate"
+                          [dropSpecialCharacters]="false"
+                          #dtgravacaoate="ngModel"
+                          minlength="10"
+                        />
+                        <app-message
+                          [control]="dtgravacaoate"
+                          error="minlength"
+                          text="Digite uma data completa"
+                        >
+                        </app-message>
+                      </div>
+                      <div
+                        class="grid flex justify-content-end align-items-center mt-2 mr-1"
+                      >
+                        <button
+                          pButton
+                          pRipple
+                          type="button"
+                          label="Limpar Filtro"
+                          class="p-button-raised"
+                          icon="fa-solid fa-filter"
+                          (click)="limparData('dataGravacao')"
+                        ></button>
+                      </div>
+                    </div>
+                    <div
+                      class="grid flex justify-content-end align-items-center mt-2 mr-1"
+                    >
+                      <button
+                        pButton
+                        pRipple
+                        type="button"
+                        label="Limpar Filtro"
+                        class="p-button-raised"
+                        icon="fa-solid fa-filter"
+                        (click)="limparData('dataGravacao')"
+                      ></button>
+                    </div>
+                  </ng-template>
+                </p-overlayPanel>
+                <button
+                  pButton
+                  pRipple
+                  type="button"
+                  label="Pesquisar"
+                  [ngClass]="
+                    datagravacaode || datagravacaoate ? null : 'p-button-text'
+                  "
+                  class="p-button-raised w-full"
+                  (click)="dataGravacao.toggle($event)"
+                ></button>
+              </div>
+            </form>
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+
+      <ng-template
+        pTemplate="body"
+        let-produto
+        let-columns="columns"
+        let-rowData
+      >
+        <tr [pSelectableRow]="rowData">
+          <td class="btnEditar">
+            <div class="col-td">
+              <button
+                pButton
+                pRipple
+                type="button"
+                class="p-button-text p-button-primary"
+                icon="fas fa-pen"
+                pTooltip="Editar"
+                tooltipPosition="top"
+                [routerLink]="['/produtos', produto.id]"
+              ></button>
+              <!-- <button
+                pButton
+                pRipple
+                type="button"
+                class="p-button-text p-button-primary"
+                pTooltip="Adiconar Imagem"
+                icon="pi pi-camera"
+                tooltipPosition="top"
+                (click)="onImageButtonClick(produto.id, $event)"
+              ></button> -->
+              <!-- <button
+                pButton
+                pRipple
+                type="button"
+                class="p-button-text p-button-primary"
+                pTooltip="Visualizar Imagem"
+                icon="pi pi-image"
+                tooltipPosition="top"
+                (click)="showProduto(produto.id, $event)"
+              ></button> -->
+            </div>
+          </td>
+          <td
+            *ngFor="let cols of columns"
+            [ngStyle]="{ 'min-width': cols.width }"
+            tooltipPosition="top"
+            pTooltip="{{
+              rowData[cols.field] && cols.data
+                ? (rowData[cols.field] | date : 'dd/MM/yyyy H:mm')
+                : rowData[cols.field]
+            }}"
+          >
+            <span class="p-column-title">{{ cols.header }}:</span>
+            {{
+              cols.data
+                ? (rowData[cols.field] | date : cols.format)
+                : rowData[cols.field]
+            }}
+          </td>
+          <td>
+            {{ produto.status ? "Ativo" : "Inativo" }}
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div
+          class="flex flex-wrap justify-content-between flex-wrap card-container purple-container"
+          (mouseenter)="verifyFocus()"
+        >
+          <div
+            class="col-12 md:col-4 lg:col-5 flex align-items-center justify-content-start"
+            (mouseenter)="verifyFocus()"
+          >
+            <button
+              pButton
+              pRipple
+              type="button"
+              class="p-button-raised p-button-primary"
+              (mouseenter)="verifyFocus()"
+              [icon]="blockBtnFilter ? 'pi pi-filter-slash' : 'pi pi-filter'"
+              #buttonFilter
+              label="Limpar Filtros"
+              (click)="onClear()"
+              [disabled]="blockBtnFilter"
+            ></button>
+          </div>
+
+          <div
+            class="col-12 md:col-8 lg:col-7 flex flex-wrap align-items-center justify-content-end"
+          >
+            <div class="flex col-12 md:col-6 lg:col-5 justify-content-end">
+              <span class="currentPageTemplate"
+                >Página {{ filtro.pagina + 1 }} de {{ totalPages }} ({{
+                  totalRegistros
+                }}
+                registros)</span
+              >
+            </div>
+            <div class="flex justify-content-end">
+              <p-paginator
+                #paginator
+                [rows]="filtro.itensPorPagina"
+                [totalRecords]="totalRegistros"
+                [rowsPerPageOptions]="rowsPerPageTable"
+                (onPageChange)="changePage($event)"
+              ></p-paginator>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td colspan="9">
+            <p class="emptyMessage">Nenhum registro encontrado...</p>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</main>
+
+<p-overlayPanel #imagem>
+  <div class="p-grid p-fluid">
+    <div class="p-col-12 p-md-6">
+      <h3>Upload de Foto do Produto</h3>
+
+      <form (ngSubmit)="onSubmit()" #produtoForm="ngForm">
+        <div class="p-field">
+          <label for="descricao">Descrição da Foto</label>
+          <input
+            type="text"
+            pInputText
+            [(ngModel)]="descricao"
+            name="descricao"
+            required
+          />
+        </div>
+
+        <div class="p-field">
+          <label for="foto">Selecione a Foto</label>
+          <p-fileUpload
+            name="file"
+            customUpload="true"
+            accept="image/*"
+            mode="basic"
+            auto="true"
+            chooseLabel="Escolher Foto"
+            (onSelect)="onFileSelect($event)"
+          ></p-fileUpload>
+        </div>
+
+        <div class="p-field">
+          <button
+            pButton
+            type="submit"
+            label="Salvar Foto"
+            icon="pi pi-save"
+          ></button>
+        </div>
+      </form>
+
+      <!-- Lista com os nomes das imagens selecionadas -->
+      <div *ngIf="imagemNomes.length > 0">
+        <h4>Imagens Selecionadas:</h4>
+        <ul>
+          <li *ngFor="let nome of imagemNomes">{{ nome }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</p-overlayPanel>
+
+<p-dialog
+  header="Produto Imagem"
+  [(visible)]="displayProduto"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="mydialog"
+  [style]="{ width: '400px' }"
+>
+  <ng-template pTemplate="content">
+    <!-- Exibe o spinner enquanto estiver carregando -->
+    <p-progressSpinner *ngIf="loading"></p-progressSpinner>
+
+    <!-- Exibe a imagem se ela existir e o carregamento estiver concluído -->
+    <div
+      *ngIf="
+        !loading && !imageError && produtoSelecionadoComImagem?.imageUrl;
+        else noImage
+      "
+    >
+      <img
+        [src]="produtoSelecionadoComImagem.imageUrl"
+        alt="Imagem do Produto"
+        style="max-width: 50%"
+      />
+    </div>
+
+    <!-- Exibe a mensagem de erro caso não seja possível carregar a imagem -->
+    <p *ngIf="imageError" class="error-message">
+      Erro ao carregar a imagem do produto. Tente novamente mais tarde.
+    </p>
+
+    <!-- Caso não tenha imagem, exibe uma mensagem alternativa -->
+    <ng-template #noImage>
+      <p>Imagem não disponível para este produto.</p>
+    </ng-template>
+  </ng-template>
+
+  <!-- Rodapé do diálogo -->
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      label="Fechar"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="displayProduto = false"
+    ></button>
+  </ng-template>
+</p-dialog>

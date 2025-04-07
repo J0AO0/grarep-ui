@@ -1,0 +1,19 @@
+.p-button-danger {
+    background-color: #e74c3c;
+    border: none;
+  }
+
+  .espacamento-pdialog {
+    margin: 10px;
+  }
+
+/* styles.css ou no seu arquivo de estilos do componente */
+.p-cellEditor input {
+  height: 30px; /* Ajuste conforme necessário */
+  width: 100%; /* Para ocupar toda a largura da célula */
+  box-sizing: border-box; /* Para incluir padding e border no cálculo da largura */
+}
+
+.p-column-title {
+  font-size: 14px; /* Ajuste conforme necessário */
+}
