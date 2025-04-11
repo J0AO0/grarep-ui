@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
@@ -6,6 +6,8 @@ import { environment } from '../../../environments/environment';
 import * as moment from 'moment-timezone';
 import { firstValueFrom } from 'rxjs';
 import { Pedidos } from 'src/app/core/models/pedidos.model';
+import { ProdutoPedido } from 'src/app/core/models/produtopedido.model';
+import { Produtos } from 'src/app/core/models/produtos.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +18,23 @@ export class PedidosService {
   constructor(private http: HttpClient) {
     this.pedidoUrl = `${environment.apiUrl}/pedidos`;
     
+  }
+
+  buscarValores(
+    idpedido: number,
+    idproduto: number
+  ): Promise<ProdutoPedido> {
+    return firstValueFrom(
+      this.http.get(`${this.pedidoUrl}/${idpedido}/${idproduto}`)
+    ).then((response) => response as ProdutoPedido);
+  }
+
+  carregarProdutos(produto): Promise<Produtos[]> {
+    let params = new HttpParams();
+    params = params.set('id', produto);
+    return firstValueFrom(this.http.get(this.pedidoUrl, { params })).then(
+      (response) => response as Produtos[]
+    );
   }
 
   listar(): Promise<any> {

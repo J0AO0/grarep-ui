@@ -56,6 +56,17 @@ export class ProdutoService {
     );
   }
 
+  listarProdutosC(): Promise<any> {
+    return firstValueFrom(
+      this.http.get(`${this.produtoUrl}`)
+    ).then((response) => {
+      const obj = response as any[];
+      this.convertStringDate(obj);
+      console.log(obj);
+      return obj;
+    })
+  }
+
   listarComFiltro(filtro: FiltrosProdutos): Promise<any> {
     const param: { [k: string]: any } = this.validarParametros(filtro);
     return firstValueFrom(this.http.get(`${this.produtoUrl}`, { params: param })).then(

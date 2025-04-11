@@ -1,3 +1,4 @@
+import { ProdutoPedido } from "./produtopedido.model";
 import { Produtos } from "./produtos.model";
 
 
@@ -10,4 +11,5 @@ export class Pedidos {
     quantidade: number;
     datagravacao: Date;
     emailusuario: string;
+    ProdutoPedido = new Array<ProdutoPedido>();
 }

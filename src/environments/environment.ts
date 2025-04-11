@@ -1,7 +1,7 @@
 export const environment = {
     production: false,
-    whiteListedDomains: ['localhost:9092'],
-    blackListedDomains: ['http://localhost:9092/oauth/token'],
-    apiUrl: 'http://localhost:9092',
+    whiteListedDomains: ['192.168.10.144:9092'],
+    blackListedDomains: ['http://192.168.10.144:9092/oauth/token'],
+    apiUrl: 'http://192.168.10.144:9092',
     version: '1.0.0'
 }

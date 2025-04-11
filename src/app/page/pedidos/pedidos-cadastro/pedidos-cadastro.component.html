@@ -5,285 +5,134 @@
     </div>
 
     <div class="flex justify-content-start mb-2">
-      <button
-        pButton
-        type="button"
-        class="p-button-primary"
-        icon="pi pi-arrow-left"
-        pTooltip="Voltar"
-        routerLink="/pedidos"
-      ></button>
+      <button pButton type="button" class="p-button-primary" icon="pi pi-arrow-left" pTooltip="Voltar"
+        routerLink="/pedidos"></button>
     </div>
 
-    <form #formProduto="ngForm" (ngSubmit)="salvar(formProduto)">
+    <form #formPedido="ngForm" (ngSubmit)="salvar(formPedido)">
       <div class="grid flex flex-wrap justify-content-center">
+        
         <div class="col-12 md:col-6 lg:col-3">
           <span>NF</span>
-          <input
-            type="number"
-            name="nf"
-            #nf="ngModel"
-            [(ngModel)]="pedidos.nf"
-            pInputText
-            class="w-full"
-            [required]="true"
-            minlength="2"
-            maxlength="60"
-            [pKeyFilter]="regex.stringNumber"
-            upperCase
-          />
+          <input type="number" name="nf" #nf="ngModel" [(ngModel)]="pedidos.nf" pInputText class="w-full"
+            [required]="true" minlength="2" maxlength="60" [pKeyFilter]="regex.stringNumber" upperCase />
 
-          <app-message
-            [control]="nf"
-            error="required"
-            text="NF é obrigatória..."
-          ></app-message>
-          <app-message
-            [control]="nf"
-            error="minlength"
-            text="Mínimo de 5 caracteres..."
-          ></app-message>
-          <app-message
-            [control]="nf"
-            error="maxlength"
-            text="Máximo de 10 caracteres..."
-          ></app-message>
+          <app-message [control]="nf" error="required" text="NF é obrigatória..."></app-message>
+          <app-message [control]="nf" error="minlength" text="Mínimo de 5 caracteres..."></app-message>
+          <app-message [control]="nf" error="maxlength" text="Máximo de 10 caracteres..."></app-message>
         </div>
 
-         <div class="col-12 md:col-6 lg:col-3">
-          <span>Representante</span>
-          <input
-            type="text"
-            name="representante"
-            #representante="ngModel"
-            [(ngModel)]="pedidos.representante"
-            pInputText
-            class="w-full"
-            [required]="true"
-            minlength="2"
-            maxlength="60"
-            [pKeyFilter]="regex.stringNumber"
-          />
+      
 
-          <app-message
-            [control]="representante"
-            error="required"
-            text="Representante é obrigatório..."
-          ></app-message>
-          <app-message
-            [control]="representante"
-            error="minlength"
-            text="Mínimo de 5 caracteres..."
-          ></app-message>
-          <app-message
-            [control]="representante"
-            error="maxlength"
-            text="Máximo de 30 caracteres..."
-          ></app-message>
-        </div>
 
-        <div class="col-12 md:col-6 lg:col-3">
-          <span>Arquiteto</span>
-          <input
-            type="text"
-            name="arquiteto"
-            #arquiteto="ngModel"
-            [(ngModel)]="pedidos.arquiteto"
-            pInputText
-            class="w-full"
-            [required]="true"
-            minlength="2"
-            maxlength="60"
-            [pKeyFilter]="regex.stringNumber"
-          />
+      <div class="col-12 md:col-6 lg:col-3">
+        <span>Representante</span>
+        <input type="text" name="representante" #representante="ngModel" [(ngModel)]="pedidos.representante" pInputText
+          class="w-full" [required]="true" minlength="2" maxlength="60" [pKeyFilter]="regex.stringNumber" />
 
-          <app-message
-            [control]="arquiteto"
-            error="required"
-            text="Arquiteto é obrigatório..."
-          ></app-message>
-          <app-message
-            [control]="arquiteto"
-            error="minlength"
-            text="Mínimo de 5 caracteres..."
-          ></app-message>
-          <app-message
-            [control]="arquiteto"
-            error="maxlength"
-            text="Máximo de 30 caracteres..."
-          ></app-message>
-        </div>
+        <app-message [control]="representante" error="required" text="Representante é obrigatório..."></app-message>
+        <app-message [control]="representante" error="minlength" text="Mínimo de 5 caracteres..."></app-message>
+        <app-message [control]="representante" error="maxlength" text="Máximo de 30 caracteres..."></app-message>
       </div>
+
+      <div class="col-12 md:col-6 lg:col-3">
+        <span>Arquiteto</span>
+        <input type="text" name="arquiteto" #arquiteto="ngModel" [(ngModel)]="pedidos.arquiteto" pInputText
+          class="w-full" [required]="true" minlength="2" maxlength="60" [pKeyFilter]="regex.stringNumber" />
+
+        <app-message [control]="arquiteto" error="required" text="Arquiteto é obrigatório..."></app-message>
+        <app-message [control]="arquiteto" error="minlength" text="Mínimo de 5 caracteres..."></app-message>
+        <app-message [control]="arquiteto" error="maxlength" text="Máximo de 30 caracteres..."></app-message>
+      </div>
+
+      <div class="col-12 md:col-6 lg:col-3"></div>
+      <div class="col-12 md:col-6 lg:col-3"></div>
+
+      <div class="col-12 md:col-6 lg:col-3">
+        <button pButton class="p-button-raised p-button-secondary" type="button" label="Vincular Produtos"
+          icon="pi pi-bars" (click)="prepararNovoPedido()"></button>
+      </div>
+
+
+
+  <!--    <p-table [value]="pedidos.produtoPedido" [scrollable]="true" [rows]="10" paginator="true" [columns]="colsItens"
+      [showCurrentPageReport]="true" [rowHover]="true" selectionMode="single" styleClass="p-datatable-striped"
+      selectionMode="single" currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} entradas" r>
+
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th class="btnAcoes">&nbsp;</th>
+          <th ngFor="let colsItens of columns" [ngStyle]="{'width': colsItens.width}">
+            {{colsItens.header}}
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-itens let-columns="columns" let-rowData let-rowIndex="rowIndex">
+        <tr [pSelectableRow]="rowData">
+          <td class="btnAcoes">
+            <button pButton pRipple type="button" class="p-button-text p-button-danger " icon="fas fa-trash"
+              label="Excluir" pTooltip="Excluir" tooltipPosition="top" (click)="yesDelete(rowIndex)"></button>
+          </td>
+          <tdngFor="let colsItens of columns" [ngStyle]="{'width': colsItens.width}">
+            <span class="p-column-title">{{colsItens.header}}:</span>
+            {{
+            colsItens.currency ? (rowData[colsItens.field]| currency : colsItens.format): rowData[colsItens.field]
+            &&
+            colsItens.data ? (rowData[colsItens.field]| date : colsItens.format) : rowData[colsItens.field]}}
+          </td>
+        </tr>
+        <div id="linha-horizontal"></div>
+      </ng-template>
+
+      </p-table> -->
+
+
+
       <div class="flex flex-wrap justify-content-center mt-4">
         <div class="col-12 md:col-6 lg:col-3">
-          <button
-            pButton
-            type="submit"
-            class="p-button-primary w-full"
-            icon="pi pi-save"
-            [disabled]="formProduto.invalid || salvando"
-            pTooltip="Salvar"
-            label="Salvar"
-          ></button>
+          <button pButton type="submit" class="p-button-primary w-full" icon="pi pi-save"
+            [disabled]="formPedido.invalid || salvando" pTooltip="Salvar" label="Salvar"></button>
         </div>
       </div>
+
       <div *ngIf="salvando" class="grid flex justify-content-center mt-4">
-        <p-progressSpinner
-          [style]="{ width: '50px', heigth: '50px' }"
-          styleClass="custom-spinner"
-          strokeWidth="8"
-          animation=".5s"
-        ></p-progressSpinner>
-        <div class="grid col-12 justify-content-center">
-          <h4>Salvando aguarde...</h4>
+        <div class="col-12 text-center">
+          <p-progressSpinner [style]="{ width: '50px', height: '50px' }" styleClass="custom-spinner" strokeWidth="8"
+            animationDuration=".5s"></p-progressSpinner>
+          <h4 class="mt-3">Salvando, aguarde...</h4>
         </div>
       </div>
-    </form>
 
-
-
-    <form #formPedido="ngForm">
-      <div class="grid flex flex-wrap justify-content-center teste">
-        <div class="col-12 md:col-6 lg:col-3 p-fluid">  
-          <button pButton type="button"  class="p-button-text btn-sidebar-width alias"
-                    tooltipPosition="right" label="Produtos" (click)="abrirDialogoProdutos()"  ></button>
-        </div>
-      </div>
-     <!-- Tabela com produtos escolhidos -->
-<p-table
-*ngIf="produtosSelecionados && produtosSelecionados.length"
-[value]="produtosSelecionados"
-[responsiveLayout]="'scroll'"
-class="p-datatable-sm p-datatable-gridlines p-mt-3"
->
-<ng-template pTemplate="header">
-  <tr>
-    <th>SKU</th>
-    <th>Nome</th>
-    <th>Quantidade</th>
-    <th>Ações</th>
-  </tr>
-</ng-template>
-<ng-template pTemplate="body" let-produto>
-  <tr>
-    <td>{{ produto.sku }}</td>
-    <td>{{ produto.nome }}</td>
-    <td>{{ produto.quantidade }}</td>
-    <td>
-      <button
-        pButton
-        icon="pi pi-trash"
-        class="p-button-danger p-button-sm"
-        (click)="removerProduto(produto)"
-      ></button>
-    </td>
-  </tr>
-</ng-template>
-</p-table>
-      <div *ngIf="salvando" class="grid flex justify-content-center mt-4">
-        <p-progressSpinner
-          [style]="{ width: '50px', heigth: '50px' }"
-          styleClass="custom-spinner"
-          strokeWidth="8"
-          animation=".5s"
-        ></p-progressSpinner>
-        <div class="grid col-12 justify-content-center">
-          <h4>Salvando aguarde...</h4>
-        </div>
-      </div>
+    </div>
     </form>
   </p-card>
 </main>
-<p-dialog
-  header="Selecionar Produtos"
-  styleClass="mydialog"
-  [(visible)]="displayProdutos"
-  [modal]="true"
-  [draggable]="false"
-  [resizable]="false"
-  [style]="{ width: '65vw' }"
->
-  <!-- Campo de pesquisa -->
-  <div class="p-inputgroup mb-3">
-    <span class="p-inputgroup-addon">
-      <i class="pi pi-search"></i>
-    </span>
-    <input
-      id="produtoPesquisa"
-      type="text"
-      pInputText
-      placeholder="Buscar produto pelo nome..."
-      [(ngModel)]="filtroProduto"
-      (input)="filtrarProdutosPorNome()"
-      class="w-full"
-    />
-  </div>
 
-  <!-- Tabela de produtos com seleção múltipla -->
-  <p-table
-    [value]="produtosFiltrados"
-    [loading]="loading"
-    [(selection)]="produtosSelecionados"
-    (selectionChange)="onSelecionadosChange($event)"
-    selectionMode="multiple"
-    dataKey="sku"
-    responsiveLayout="scroll"
-    rowHover
-    class="p-datatable-sm p-datatable-striped p-datatable-gridlines"
-  >
-    <!-- Cabeçalho -->
-    <ng-template pTemplate="header">
-      <tr>
-        <th style="width: 3rem">
-          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-        </th>
-        <th>SKU</th>
-        <th>Nome</th>
-        <th>Quantidade</th>
-      </tr>
-    </ng-template>
 
-    <!-- Corpo -->
-    <ng-template pTemplate="body" let-produto>
-      <tr>
-        <td>
-          <p-tableCheckbox [value]="produto"></p-tableCheckbox>
-        </td>
-        <td>{{ produto.sku }}</td>
-        <td>{{ produto.nome }}</td>
-        <td style="width: 10rem">
-          <p-inputNumber
-          [(ngModel)]="quantidades[produto.sku]"
-            [min]="1"
-            [showButtons]="true"
-            buttonLayout="horizontal"
-            incrementButtonIcon="pi pi-plus"
-            decrementButtonIcon="pi pi-minus"
-            inputStyleClass="w-full"
-          ></p-inputNumber>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
 
-  <!-- Rodapé -->
-  <ng-template pTemplate="footer">
-    <div class="flex justify-content-end gap-2 mt-3">
-      <button
-        pButton
-        label="Confirmar"
-        icon="pi pi-check"
-        class="p-button-success"
-        (click)="confirmarSelecao()"
-      ></button>
-      <button
-        pButton
-        label="Cancelar"
-        icon="pi pi-times"
-        class="p-button-secondary"
-        (click)="cancelarSelecao()"
-      ></button>
+
+
+
+<p-dialog header="PRODUTOS" styleClass="mydialog" [baseZIndex]="10000" [(visible)]="exibirForm" modal="modal"
+  *ngIf="produtoPedido" closeOnEscape="true" dismissableMask="true">
+  <form #frmProd="ngForm" autocomplete="off" (ngSubmit)="confirmarPedido(frmProd)">
+    <div class="grid mt-4">
+      <div class="col-12 md:col-6">
+        <p-dropdown styleClass="dropdown" name="prtodutoSelecionado" filter="true" [autoDisplayFirst]="false"
+          [options]="produtos" [(ngModel)]="produtoPedido.idProduto" [showClear]="true"
+          [emptyFilterMessage]="messageDrop" placeholder="Selecione..." required>
+        </p-dropdown>
+      </div>
     </div>
-  </ng-template>
+
+    <div class="grid flex flex-wrap justify-content-center mt-5">
+      <div class="col-12 md:col-6">
+        <button pButton pRipple type="submit" label="Confirmar" icon="fas fa-save" [disabled]="frmProd.invalid"
+          class="p-button-raised p-button-success w-full"></button>
+      </div>
+    </div>
+  </form>
 </p-dialog>
+
 
