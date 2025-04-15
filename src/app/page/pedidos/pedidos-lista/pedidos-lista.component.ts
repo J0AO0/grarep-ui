@@ -51,14 +51,12 @@ export class PedidosListaComponent implements OnInit {
 
     this.cols = [
       { field: 'id', header: 'Código', width: '100px', type: 'numeric', key: 1 },
-      { field: 'produto', header: 'Nome', width: '150px', type: 'text', key: 2 },
-      { field: 'descricao', header: 'Nome', width: '150px', type: 'text', key: 2 },
-      { field: 'descricao', header: 'Nome', width: '150px', type: 'text', key: 2 },
-      { field: 'descricao', header: 'Nome', width: '150px', type: 'text', key: 2 },
-      { field: 'descricao', header: 'Nome', width: '150px', type: 'text', key: 2 },
-      { field: 'datagravacao', header: 'Data Gravação', width: '100px', data: true, format: `dd/MM/yyyy H:mm`, type: 'date', key: 4 },
-      { field: 'emailusuario', header: 'Usuário Gravação', width: '150px', type: 'text', key: 5 },
-      { field: 'statusformatado', header: 'Status', width: '150px', type: 'text', key: 6 }
+      { field: 'representante', header: 'Representante', width: '150px', type: 'text', key: 2 },
+      { field: 'arquiteto', header: 'Arquiteto', width: '150px', type: 'text', key: 3 },
+      { field: 'nf', header: 'NF', width: '150px', type: 'number', key: 4 },
+      { field: 'datagravacao', header: 'Data Gravação', width: '100px', data: true, format: `dd/MM/yyyy H:mm`, type: 'date', key: 5 },
+      { field: 'emailusuario', header: 'Usuário Gravação', width: '150px', type: 'text', key: 6 },
+     // { field: 'statusformatado', header: 'Status', width: '150px', type: 'text', key: 6 }
     ]
   }
 

@@ -9,9 +9,10 @@
         routerLink="/pedidos"></button>
     </div>
 
+
     <form #formPedido="ngForm" (ngSubmit)="salvar(formPedido)">
       <div class="grid flex flex-wrap justify-content-center">
-        
+
         <div class="col-12 md:col-6 lg:col-3">
           <span>NF</span>
           <input type="number" name="nf" #nf="ngModel" [(ngModel)]="pedidos.nf" pInputText class="w-full"
@@ -22,73 +23,75 @@
           <app-message [control]="nf" error="maxlength" text="Máximo de 10 caracteres..."></app-message>
         </div>
 
+
+
+
+        <div class="col-12 md:col-6 lg:col-3">
+          <span>Representante</span>
+          <input type="text" name="representante" #representante="ngModel" [(ngModel)]="pedidos.representante"
+            pInputText class="w-full" [required]="true" minlength="2" maxlength="60"
+            [pKeyFilter]="regex.stringNumber" />
+
+          <app-message [control]="representante" error="required" text="Representante é obrigatório..."></app-message>
+          <app-message [control]="representante" error="minlength" text="Mínimo de 5 caracteres..."></app-message>
+          <app-message [control]="representante" error="maxlength" text="Máximo de 30 caracteres..."></app-message>
+        </div>
+
+        <div class="col-12 md:col-6 lg:col-3">
+          <span>Arquiteto</span>
+          <input type="text" name="arquiteto" #arquiteto="ngModel" [(ngModel)]="pedidos.arquiteto" pInputText
+            class="w-full" [required]="true" minlength="2" maxlength="60" [pKeyFilter]="regex.stringNumber" />
+
+          <app-message [control]="arquiteto" error="required" text="Arquiteto é obrigatório..."></app-message>
+          <app-message [control]="arquiteto" error="minlength" text="Mínimo de 5 caracteres..."></app-message>
+          <app-message [control]="arquiteto" error="maxlength" text="Máximo de 30 caracteres..."></app-message>
+        </div>
+
+        <div class="col-12 md:col-6 lg:col-2"></div>
+        <div class="col-12 md:col-6 lg:col-2"></div>
+
+        <div class="col-12 md:col-6 lg:col-3">
+          <button pButton class="p-button-raised p-button-secondary" type="button" label="Vincular Produtos"
+            icon="pi pi-bars" (click)="prepararNovoPedido()"></button>
+        </div>
+
+
+      </div>
+        <p-table [value]="pedidos.produtos" [scrollable]="true" [rows]="10" paginator="true" [columns]="colsItens"
+          [showCurrentPageReport]="true" [rowHover]="true" selectionMode="single" styleClass="p-datatable-striped"
+          selectionMode="single" currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} entradas" r>
+
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th class="btnAcoes">&nbsp;</th>
+              <th class="btnAcoes">&nbsp;</th>
+              <th style="width: 100px;">ID</th>
+              <th style="width: 100px;">Quantidade</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-itens let-columns="columns" let-rowData let-rowIndex="rowIndex">
+            <tr [pSelectableRow]="rowData">
+              <td class="btnAcoes">
+                <button pButton pRipple type="button" class="p-button-text p-button-danger " icon="fas fa-trash"
+                  label="Excluir" pTooltip="Excluir" tooltipPosition="top" (click)="confirmarExclusao()"></button>
+              </td>
+              <td style="width: 100px;">
+                <span class="p-column-title">Acesso:</span>
+                {{rowData.idProduto}}
+              </td>
+              <td style="width: 100px;">
+                <span class="p-column-title">Exame:</span>
+                {{rowData.quantidade}}
+              </td>
+            </tr>
+            <div id="linha-horizontal"></div>
+          </ng-template>
+
+        </p-table>
+
+
       
-
-
-      <div class="col-12 md:col-6 lg:col-3">
-        <span>Representante</span>
-        <input type="text" name="representante" #representante="ngModel" [(ngModel)]="pedidos.representante" pInputText
-          class="w-full" [required]="true" minlength="2" maxlength="60" [pKeyFilter]="regex.stringNumber" />
-
-        <app-message [control]="representante" error="required" text="Representante é obrigatório..."></app-message>
-        <app-message [control]="representante" error="minlength" text="Mínimo de 5 caracteres..."></app-message>
-        <app-message [control]="representante" error="maxlength" text="Máximo de 30 caracteres..."></app-message>
-      </div>
-
-      <div class="col-12 md:col-6 lg:col-3">
-        <span>Arquiteto</span>
-        <input type="text" name="arquiteto" #arquiteto="ngModel" [(ngModel)]="pedidos.arquiteto" pInputText
-          class="w-full" [required]="true" minlength="2" maxlength="60" [pKeyFilter]="regex.stringNumber" />
-
-        <app-message [control]="arquiteto" error="required" text="Arquiteto é obrigatório..."></app-message>
-        <app-message [control]="arquiteto" error="minlength" text="Mínimo de 5 caracteres..."></app-message>
-        <app-message [control]="arquiteto" error="maxlength" text="Máximo de 30 caracteres..."></app-message>
-      </div>
-
-      <div class="col-12 md:col-6 lg:col-3"></div>
-      <div class="col-12 md:col-6 lg:col-3"></div>
-
-      <div class="col-12 md:col-6 lg:col-3">
-        <button pButton class="p-button-raised p-button-secondary" type="button" label="Vincular Produtos"
-          icon="pi pi-bars" (click)="prepararNovoPedido()"></button>
-      </div>
-
-
-
-  <!--    <p-table [value]="pedidos.produtoPedido" [scrollable]="true" [rows]="10" paginator="true" [columns]="colsItens"
-      [showCurrentPageReport]="true" [rowHover]="true" selectionMode="single" styleClass="p-datatable-striped"
-      selectionMode="single" currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} entradas" r>
-
-      <ng-template pTemplate="header" let-columns>
-        <tr>
-          <th class="btnAcoes">&nbsp;</th>
-          <th ngFor="let colsItens of columns" [ngStyle]="{'width': colsItens.width}">
-            {{colsItens.header}}
-          </th>
-        </tr>
-      </ng-template>
-
-      <ng-template pTemplate="body" let-itens let-columns="columns" let-rowData let-rowIndex="rowIndex">
-        <tr [pSelectableRow]="rowData">
-          <td class="btnAcoes">
-            <button pButton pRipple type="button" class="p-button-text p-button-danger " icon="fas fa-trash"
-              label="Excluir" pTooltip="Excluir" tooltipPosition="top" (click)="yesDelete(rowIndex)"></button>
-          </td>
-          <tdngFor="let colsItens of columns" [ngStyle]="{'width': colsItens.width}">
-            <span class="p-column-title">{{colsItens.header}}:</span>
-            {{
-            colsItens.currency ? (rowData[colsItens.field]| currency : colsItens.format): rowData[colsItens.field]
-            &&
-            colsItens.data ? (rowData[colsItens.field]| date : colsItens.format) : rowData[colsItens.field]}}
-          </td>
-        </tr>
-        <div id="linha-horizontal"></div>
-      </ng-template>
-
-      </p-table> -->
-
-
-
       <div class="flex flex-wrap justify-content-center mt-4">
         <div class="col-12 md:col-6 lg:col-3">
           <button pButton type="submit" class="p-button-primary w-full" icon="pi pi-save"
@@ -104,7 +107,7 @@
         </div>
       </div>
 
-    </div>
+
     </form>
   </p-card>
 </main>
@@ -123,6 +126,24 @@
           [options]="produtos" [(ngModel)]="produtoPedido.idProduto" [showClear]="true"
           [emptyFilterMessage]="messageDrop" placeholder="Selecione..." required>
         </p-dropdown>
+
+        <div class="grid mt-3">
+          <div class="col-12 md:col-6">
+            <span>Quantidade</span>
+            <input type="number"
+                   name="quantidade"
+                   [(ngModel)]="produtoPedido.quantidade"
+                   #quantidade="ngModel"
+                   pInputText
+                   class="w-full"
+                   required
+                   min="1" />
+            
+            <!-- Validações -->
+            <app-message [control]="quantidade" error="required" text="Quantidade é obrigatória."></app-message>
+            <app-message [control]="quantidade" error="min" text="Quantidade mínima é 1."></app-message>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -134,5 +155,3 @@
     </div>
   </form>
 </p-dialog>
-
-
