@@ -17,7 +17,6 @@ export class PedidosService {
 
   constructor(private http: HttpClient) {
     this.pedidoUrl = `${environment.apiUrl}/pedidos`;
-    
   }
 
   buscarValores(
@@ -37,6 +36,25 @@ export class PedidosService {
     );
   }
 
+  adicionarProdutos(idPedido: number, produtos: ProdutoPedido[]): Promise<void> {
+    const url = `${this.pedidoUrl}/${idPedido}/produtos`;
+    console.log('URL da requisição:', url);
+    console.log('Corpo da requisição:', JSON.stringify(produtos, null, 2));
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    const body = { produtos }; // Envolve o array em um objeto, ajuste conforme o backend
+
+    return firstValueFrom(this.http.post<void>(url, body, { headers }))
+      .then(() => {
+        console.log('Produtos adicionados ao pedido com sucesso');
+      })
+      .catch(error => {
+        console.error('Erro ao adicionar produtos ao pedido:', error);
+        console.log('Detalhes do erro:', error.error); // Exibe a mensagem do servidor
+        throw error;
+      });
+  }
+
   listar(): Promise<any> {
     return firstValueFrom(this.http.get(`${this.pedidoUrl}`)).then(
       (response) => {
@@ -44,32 +62,35 @@ export class PedidosService {
         this.convertStringDate(obj);
         return obj;
       }
-    )
+    );
   }
 
   excluir(id: number): Promise<void> {
     return firstValueFrom(this.http.delete(`${this.pedidoUrl}/${id}`))
-      .then()
       .then(() => null);
   }
 
-
   adicionar(pedido: Pedidos): Promise<Pedidos> {
-    return firstValueFrom(this.http.post<Pedidos>(this.pedidoUrl, pedido));
+    return this.http.post<Pedidos>(`${this.pedidoUrl}`, pedido)
+      .toPromise()
+      .then(pedidoCriado => {
+        return pedidoCriado;
+      })
+      .catch(error => {
+        console.error('Erro ao criar pedido', error);
+        throw error;
+      });
   }
-
 
   atualizar(pedido: Pedidos): Promise<Pedidos> {
     return firstValueFrom(this.http.put(`${this.pedidoUrl}/${pedido.id}`, pedido))
       .then((response) => response as Pedidos);
   }
 
-
   buscarPorId(id: number) {
     return firstValueFrom(this.http.get(`${this.pedidoUrl}/${id}`))
       .then((response) => response as Pedidos);
   }
-
 
   mudarStatus(id: number, status: boolean): Promise<void> {
     const headers = new HttpHeaders().append(
@@ -80,20 +101,14 @@ export class PedidosService {
       .then(() => null);
   }
 
-
   AlternarLista(valor: string): Promise<any> {
     return firstValueFrom(this.http.get(`${this.pedidoUrl}${valor}`))
       .then((response) => response);
   }
 
-
-
   convertStringDate(obj: any[]) {
     obj.forEach((element) => {
-      // Certifique-se de que o formato da string de data está correto
       const dateFormat = 'YYYY/MM/DD H:mm';
-
-      // Verifique se a data não é nula ou indefinida antes de tentar convertê-la
       if (element.datagravacao) {
         element.datagravacao = moment(element.datagravacao, dateFormat)
           .tz('America/Sao_Paulo')

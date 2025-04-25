@@ -159,47 +159,4 @@ export class ProdutoCadastroComponent implements OnInit {
   atualizarTituloEdicao() {
     this.title.setTitle(`Edição de Categorias: ${this.produtos.nome}`);
   }
-
-
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
-  }
-
-  // onUpload() {
-  //   if (this.selectedFile) {
-  //     this.produtoService.uploadFoto(this.selectedFile).subscribe(
-  //       (response) => console.log('Sucesso!', response),
-  //       (error) => console.log('Erro', error)
-  //     );
-  //   }
-  // }
-
-  onUpload(event: any) {
-    this.selectedFile = event.files[0]; // Captura o arquivo selecionado
-  }
-
-  onSubmit() {
-    if (this.selectedFile && this.descricao) {
-      const formData = new FormData();
-      formData.append('arquivo', this.selectedFile);
-      formData.append('descricao', this.descricao);
-
-      this.produtoId = this.produtoService.buscarPorId(this.idProduto);
-
-      console.log(this.produtoId)
-
-      this.produtoService.uploadFoto(this.produtoId, formData).subscribe({
-        next: (response) => {
-          this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Foto salva com sucesso!' });
-        },
-        error: (err) => {
-          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao salvar a foto.' });
-        }
-      });
-    } else {
-      this.messageService.add({ severity: 'warn', summary: 'Atenção', detail: 'Selecione um arquivo e insira a descrição.' });
-    }
-  }
-
-
 }

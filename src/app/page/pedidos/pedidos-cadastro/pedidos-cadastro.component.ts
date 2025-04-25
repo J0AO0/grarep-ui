@@ -197,10 +197,18 @@ export class PedidosCadastroComponent implements OnInit {
   }
 
   adicionarPedido(form: NgForm) {
-    console.log('Pedido a ser enviado:', this.pedidos);
     this.salvando = true;
-    this.pedidoService.adicionar(this.pedidos)
-      .then((pedidoAdicionado) => {
+  
+    // salva o pedido vazio primeiro
+    const pedidoASalvar = { ...this.pedidos, produtos: [] };
+  
+    this.pedidoService.adicionar(pedidoASalvar)
+      .then((pedidoSalvo) => {
+        this.pedidos.id = pedidoSalvo.id;
+  
+        // depois salva os produtos com o ID do pedido
+        this.salvarProdutosDoPedido(pedidoSalvo.id);
+  
         this.salvando = false;
         this.router.navigate(['/pedidos']);
       })
@@ -209,6 +217,57 @@ export class PedidosCadastroComponent implements OnInit {
         this.erroHandler.handle(erro);
       });
   }
+  
+  salvarProdutosDoPedido(pedidoId: number) {
+    // Mapeando os produtos para o formato esperado pelo backend
+    const produtosParaSalvar = this.produtosPedido.map(prod => ({
+      id: {
+        pedido: pedidoId, // Aqui está o pedidoId
+        produto: prod.idProduto
+      },
+      quantidade: prod.quantidade
+    }));
+  
+    // Passando ambos os parâmetros: pedidoId e os produtos para o método 'adicionarProdutos'
+    this.pedidoService.adicionarProdutos(pedidoId, produtosParaSalvar)
+      .then(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Pedido salvo com produtos!',
+          detail: 'Todos os itens foram adicionados.'
+        });
+      })
+      .catch(erro => this.erroHandler.handle(erro));
+  }
+
+
+  criarPedidoComProdutos(pedido: Pedidos, produtos: ProdutoPedido[]) {
+  this.pedidoService.adicionar(pedido)  // Cria o pedido
+    .then((pedidoCriado) => {
+      // Após o pedido ser criado, associamos os produtos
+      const produtosParaSalvar = produtos.map(prod => ({
+        produtoId: prod.idProduto,
+        quantidade: prod.quantidade
+      }));
+
+      this.pedidoService.adicionarProdutos(pedidoCriado.id, produtosParaSalvar)  // Associar os produtos
+        .then(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Pedido e produtos salvos com sucesso!',
+            detail: 'Pedido e produtos foram adicionados corretamente.'
+          });
+        })
+        .catch(erro => {
+          this.erroHandler.handle(erro);
+        });
+    })
+    .catch(erro => {
+      this.erroHandler.handle(erro);
+    });
+}
+
+  
 
   get editando() {
     return Boolean(this.pedidos.id);
