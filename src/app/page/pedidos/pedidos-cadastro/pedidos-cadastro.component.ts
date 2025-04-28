@@ -26,14 +26,13 @@ interface Column {
   templateUrl: './pedidos-cadastro.component.html',
   styleUrls: ['./pedidos-cadastro.component.css'],
 })
-
 export class PedidosCadastroComponent implements OnInit {
   messageDrop = 'Nenhum resultado encontrado...';
   descricao: string = '';
   selectedFile: File | null = null;
   displayProdutos: boolean = false;
   colsItens: Column[] = [];
-  produtos: { label: string; value: number }[] = [];         
+  produtos: { label: string; value: number }[] = [];
   loading: boolean = false;
   produtoPedido: ProdutoPedido = new ProdutoPedido();
   produtosPedido: ProdutoPedido[] = [];
@@ -58,7 +57,7 @@ export class PedidosCadastroComponent implements OnInit {
     private messageService: MessageService,
     private erroHandler: ErrorHandlerService,
     private produtoService: ProdutoService,
-    private confirmation: ConfirmationService,
+    private confirmation: ConfirmationService
   ) {}
 
   ngOnInit() {
@@ -70,7 +69,7 @@ export class PedidosCadastroComponent implements OnInit {
       // { field: 'quantidade', header: 'Quantidade', width: '200px' }
     ];
 
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       const id = params['id'];
       if (id) {
         this.carregarPedido(id);
@@ -80,17 +79,18 @@ export class PedidosCadastroComponent implements OnInit {
 
   carregarPedido(id: number) {
     this.spinner.show();
-    this.pedidoService.buscarPorId(id)
-      .then(pedido => {
+    this.pedidoService
+      .buscarPorId(id)
+      .then((pedido) => {
         this.pedidos = pedido;
         this.spinner.hide();
       })
-      .catch(erro => {
+      .catch((erro) => {
         this.erroHandler.handle(erro);
         this.spinner.hide();
       });
   }
-  
+
   prepararNovoPedido() {
     console.log('mostrar');
     console.log('produtos', this.produtos);
@@ -100,24 +100,23 @@ export class PedidosCadastroComponent implements OnInit {
 
   confirmarPedido(frm: NgForm) {
     this.pedidos.produtos.push(this.clonarProduto(this.produtoPedido));
+    this.produtosPedido = [...this.pedidos.produtos]; // Sincroniza produtosPedido, se necessário
     this.exibirForm = false;
     this.exibirFormAlteracao = false;
     frm.reset();
   }
 
   clonarProduto(produto: ProdutoPedido): ProdutoPedido {
-    return new ProdutoPedido(
-      produto.idProduto,
-      produto.quantidade
-    );
+    return new ProdutoPedido(produto.produtoId, produto.quantidade);
   }
 
-  carregarProdutoPedido(idpedido: number, idproduto: number) {
+  carregarProdutoPedido(idpedido: number, produtoId: number) {
     this.pedidoService
-      .buscarValores(idpedido, idproduto)
+      .buscarValores(idpedido, produtoId)
       .then((prodPedido) => {
-        this.pedidos.produtos[this.prodIndex].idProduto = prodPedido.idProduto;
-        this.pedidos.produtos[this.prodIndex].quantidade = prodPedido.quantidade;
+        this.pedidos.produtos[this.prodIndex].produtoId = prodPedido.produtoId;
+        this.pedidos.produtos[this.prodIndex].quantidade =
+          prodPedido.quantidade;
       })
       .catch((erro) => this.erroHandler.handle(erro));
   }
@@ -174,9 +173,9 @@ export class PedidosCadastroComponent implements OnInit {
     this.produtoService
       .listarProdutos()
       .then((prod) => {
-        this.produtos = prod.map((mp) => ({ 
-          label: `${mp.sku} - ${mp.nome}`, 
-          value: mp.id 
+        this.produtos = prod.map((mp) => ({
+          label: `${mp.sku} - ${mp.nome}`,
+          value: mp.id,
         }));
       })
       .catch((erro) => this.erroHandler.handle(erro));
@@ -198,18 +197,24 @@ export class PedidosCadastroComponent implements OnInit {
 
   adicionarPedido(form: NgForm) {
     this.salvando = true;
-  
-    // salva o pedido vazio primeiro
-    const pedidoASalvar = { ...this.pedidos, produtos: [] };
-  
-    this.pedidoService.adicionar(pedidoASalvar)
+
+    // Inclua os produtos diretamente no pedido a ser salvo
+    const pedidoASalvar = { ...this.pedidos }; // Copia o objeto pedidos com os produtos inclusos
+
+    this.pedidoService
+      .adicionar(pedidoASalvar)
       .then((pedidoSalvo) => {
         this.pedidos.id = pedidoSalvo.id;
-  
-        // depois salva os produtos com o ID do pedido
+
+        // Salva os produtos associados ao pedido
         this.salvarProdutosDoPedido(pedidoSalvo.id);
-  
+
         this.salvando = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Pedido salvo!',
+          detail: 'O pedido e os produtos foram salvos com sucesso.',
+        });
         this.router.navigate(['/pedidos']);
       })
       .catch((erro) => {
@@ -217,63 +222,74 @@ export class PedidosCadastroComponent implements OnInit {
         this.erroHandler.handle(erro);
       });
   }
-  
+
   salvarProdutosDoPedido(pedidoId: number) {
-    // Mapeando os produtos para o formato esperado pelo backend
-    const produtosParaSalvar = this.produtosPedido.map(prod => ({
+    // Mapeando os produtos de pedidos.produtos para o formato esperado pelo backend
+    const produtosParaSalvar = this.pedidos.produtos.map((prod) => ({
       id: {
-        pedido: pedidoId, // Aqui está o pedidoId
-        produto: prod.idProduto
+        pedido: pedidoId,
+        produto: prod.produtoId,
       },
-      quantidade: prod.quantidade
+      quantidade: prod.quantidade,
     }));
-  
-    // Passando ambos os parâmetros: pedidoId e os produtos para o método 'adicionarProdutos'
-    this.pedidoService.adicionarProdutos(pedidoId, produtosParaSalvar)
+
+    // Verifica se há produtos para salvar
+    if (produtosParaSalvar.length === 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Nenhum produto',
+        detail: 'Nenhum produto foi adicionado ao pedido.',
+      });
+      return;
+    }
+
+    // Envia os produtos para o backend
+    this.pedidoService
+      .adicionarProdutos(pedidoId, produtosParaSalvar)
       .then(() => {
         this.messageService.add({
           severity: 'success',
-          summary: 'Pedido salvo com produtos!',
-          detail: 'Todos os itens foram adicionados.'
+          summary: 'Produtos salvos!',
+          detail: 'Todos os itens foram adicionados ao pedido.',
         });
       })
-      .catch(erro => this.erroHandler.handle(erro));
+      .catch((erro) => this.erroHandler.handle(erro));
   }
 
-
   criarPedidoComProdutos(pedido: Pedidos, produtos: ProdutoPedido[]) {
-  this.pedidoService.adicionar(pedido)  // Cria o pedido
-    .then((pedidoCriado) => {
-      // Após o pedido ser criado, associamos os produtos
-      const produtosParaSalvar = produtos.map(prod => ({
-        produtoId: prod.idProduto,
-        quantidade: prod.quantidade
-      }));
+    this.pedidoService
+      .adicionar(pedido) // Cria o pedido
+      .then((pedidoCriado) => {
+        // Após o pedido ser criado, associamos os produtos
+        const produtosParaSalvar = produtos.map((prod) => ({
+          produtoId: prod.produtoId,
+          quantidade: prod.quantidade,
+        }));
 
-      this.pedidoService.adicionarProdutos(pedidoCriado.id, produtosParaSalvar)  // Associar os produtos
-        .then(() => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Pedido e produtos salvos com sucesso!',
-            detail: 'Pedido e produtos foram adicionados corretamente.'
+        this.pedidoService
+          .adicionarProdutos(pedidoCriado.id, produtosParaSalvar) // Associar os produtos
+          .then(() => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Pedido e produtos salvos com sucesso!',
+              detail: 'Pedido e produtos foram adicionados corretamente.',
+            });
+          })
+          .catch((erro) => {
+            this.erroHandler.handle(erro);
           });
-        })
-        .catch(erro => {
-          this.erroHandler.handle(erro);
-        });
-    })
-    .catch(erro => {
-      this.erroHandler.handle(erro);
-    });
-}
-
-  
+      })
+      .catch((erro) => {
+        this.erroHandler.handle(erro);
+      });
+  }
 
   get editando() {
     return Boolean(this.pedidos.id);
   }
 
   salvar(form: NgForm) {
+    console.log('salvar', form.value);
     if (this.editando) {
       // Editar pedido se necessário
     } else {

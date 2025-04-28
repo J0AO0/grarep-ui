@@ -1,9 +1,9 @@
 export class ProdutoPedido {
-    idProduto?: number;
+    produtoId?: number;
     quantidade?: number;
 
     constructor(idProduto?: number, quantidade?: number) {
-        this.idProduto = idProduto;
+        this.produtoId = idProduto;
         this.quantidade = quantidade;
     }
 }
