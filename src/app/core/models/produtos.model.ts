@@ -1,4 +1,3 @@
-import { Categorias } from './categorias.model';
 export class Produtos {
     id?: number;
     sku: number;

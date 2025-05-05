@@ -32,20 +32,6 @@
       shape="circle"
     >
     </p-avatar>
-
-    <p-avatar
-      icon="pi pi-cart-arrow-down"
-      styleClass="p-mr-4"
-      pTooltip="Carrinho"
-      tooltipPosition="left"
-      [style]="{
-        'background-color': '#5790ab',
-        color: '#ffffff',
-        'margin-right': '12px'
-      }"
-      shape="circle"
-    >
-    </p-avatar>
   </p-avatarGroup>
 </header>
 <div
@@ -138,55 +124,7 @@
       label="Pedido"
       routerLink="/pedidos"
     ></button>
-    <!-- Menu de Condição Pagamento Inicio -->
-    <!-- <button
-      pButton
-      type="button"
-      class="ui-button-rounded btn-menu"
-      routerLinkActive="ativo"
-      icon="fas fa-money-bill"
-      (click)="menu = false"
-      ngForm="!auth.temPermissao('R_COND')"
-      label="Condição de Pagamento"
-      routerLink="/condpagamentos"
-    ></button> -->
-    <!-- Menu de Forma de Pagamento Inicio -->
-    <!-- <button
-      pButton
-      type="button"
-      class="ui-button-rounded btn-menu"
-      routerLinkActive="ativo"
-      icon="fas fa-credit-card"
-      (click)="menu = false"
-      ngForm="!auth.temPermissao('R_FORMA')"
-      label="Forma de Pagamento"
-      routerLink="/formapagamentos"
-    ></button> -->
-    <!-- Menu de Tipo de Frete Inicio -->
-    <!-- <button
-      pButton
-      type="button"
-      class="ui-button-rounded btn-menu"
-      routerLinkActive="ativo"
-      icon="fas fa-truck-fast"
-      (click)="menu = false"
-      ngForm="!auth.temPermissao('R_FRETE')"
-      label="Tipo de Frete"
-      routerLink="/tipofretes"
-    ></button> -->
-        <!-- Menu de Tipo de Pedido Inicio -->
-        <!-- <button
-        pButton
-        type="button"
-        class="ui-button-rounded btn-menu"
-        routerLinkActive="ativo"
-        icon="fas fa-truck-fast"
-        (click)="menu = false"
-        ngForm="!auth.temPermissao('R_TIPOPEDIDO')"
-        label="Tipo de Pedido"
-        routerLink="/tipopedidos"
-      ></button> -->
-        <!-- Menu de Relatorios Inicio -->
+
     <button
     pButton
     type="button"
@@ -194,7 +132,7 @@
     routerLinkActive="ativo"
     icon="fas fa-truck-fast"
     (click)="menu = false"
-    ngForm="!auth.temPermissao('R_REL')"
+    *ngIf="auth.temPermissao('R_REL')"
     label="Relatorio"
     routerLink="/relatorios"
   ></button>

@@ -28,6 +28,10 @@ const routes: Routes = [
     path: 'pedidos', loadChildren: () =>
     import('./page/pedidos/pedidos.module').then(m =>  m.PedidosModule)
   },
+  {
+    path: 'relatorios', loadChildren: () =>
+      import('./page/relatorios/relatorios.module').then(m => m.RelatoriosModule)
+  },
   
  // { path: 'alterarsenha', component: AlterarSenhaComponent },
 

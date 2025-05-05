@@ -1,17 +1,4 @@
-import { Categorias } from "./categorias.model";
-import { Produtos } from "./produtos.model";
-import { TipoPedidos } from "./tipopedidos.model";
 
-export class FiltrosCategorias {
-  pagina: number;
-  itensPorPagina: number;
-  id: string;
-  nome: string;
-  datagravacaode: string;
-  datagravacaoate: string;
-  emailusuario: string;
-  status: string;
-}
 
 export class FiltrosEmpresas {
   pagina: number;

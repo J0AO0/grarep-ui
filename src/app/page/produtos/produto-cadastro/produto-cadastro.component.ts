@@ -11,7 +11,6 @@ import { MessageService } from 'primeng/api';
 import { NgForm } from '@angular/forms';
 import { UploadEvent } from 'primeng/fileupload';
 
-
 @Component({
   selector: 'app-produto-cadastro',
   templateUrl: './produto-cadastro.component.html',
@@ -28,32 +27,28 @@ export class ProdutoCadastroComponent implements OnInit {
   produtos = new Produtos();
   idProduto: number;
 
-  produtoId: any
+  produtoId: any;
   selectedCategoria: any;
-  categorias = []
+  categorias = [];
 
-  constructor(private produtoService: ProdutoService,
+  constructor(
+    private produtoService: ProdutoService,
     private route: ActivatedRoute,
     private router: Router,
     private title: Title,
     private spinner: NgxSpinnerService,
     private messageService: MessageService,
-    private erroHandler: ErrorHandlerService,
-  ) { }
+    private erroHandler: ErrorHandlerService
+  ) {}
 
   ngOnInit() {
-    // this.carregarCategoria();
     this.title.setTitle('Cadastro Produto');
     this.idProduto = this.route.snapshot.params['id'];
     if (this.idProduto) {
       this.spinner.show();
       this.carregarProduto(this.idProduto);
-    } 
-    // else {
-    //   this.produtos.status = true;
-    // }
+    }
   }
-
 
   get editando() {
     return Boolean(this.produtos.id);
@@ -61,6 +56,7 @@ export class ProdutoCadastroComponent implements OnInit {
 
   salvar(form: NgForm) {
     if (this.editando) {
+      this.atualizarProduto(form);
     } else {
       this.adicionarProduto(form);
     }
@@ -68,8 +64,6 @@ export class ProdutoCadastroComponent implements OnInit {
 
   atualizarProduto(form: NgForm) {
     this.salvando = true;
-    // console.log(this.selectedPaciente);
-    // console.log(this.atendimentos);
     this.produtoService
       .atualizar(this.produtos)
       .then((produto) => {
@@ -92,22 +86,20 @@ export class ProdutoCadastroComponent implements OnInit {
   adicionarProduto(form: NgForm) {
     this.salvando = true;
 
-    // Primeiro adiciona o produto
-    this.produtoService.adicionar(this.produtos)
+    this.produtoService
+      .adicionar(this.produtos)
       .then((produtoAdicionado) => {
-        // Verifique se o arquivo de imagem foi selecionado
         if (this.selectedFile) {
-          // Agora chama o upload passando o ID do produto adicionado
           const formData = new FormData();
-          formData.append('arquivo', this.selectedFile); // Adiciona o arquivo ao FormData
-          formData.append('descricao', this.descricao); // Adiciona a descrição ao FormData
+          formData.append('arquivo', this.selectedFile);
+          formData.append('descricao', this.descricao);
 
           this.produtoService.uploadFoto(produtoAdicionado.id, formData).subscribe(
             (response) => {
               this.messageService.add({
                 severity: 'success',
                 summary: 'Produto',
-                detail: 'Produto e imagem adicionados com sucesso!'
+                detail: 'Produto e imagem adicionados com sucesso!',
               });
               this.router.navigate(['/produtos']);
             },
@@ -116,11 +108,10 @@ export class ProdutoCadastroComponent implements OnInit {
             }
           );
         } else {
-          // Se não houver arquivo, apenas exibe uma mensagem de sucesso
           this.messageService.add({
             severity: 'success',
             summary: 'Produto',
-            detail: 'Produto adicionado com sucesso!'
+            detail: 'Produto adicionado com sucesso!',
           });
           this.router.navigate(['/produtos']);
         }
@@ -132,20 +123,11 @@ export class ProdutoCadastroComponent implements OnInit {
       });
   }
 
-
-
   carregarProduto(id: number) {
-    this.produtoService.buscarPorId(id)
+    this.produtoService
+      .buscarPorId(id)
       .then((obj) => {
-        setTimeout(() => {
-          // this.selectedCategoria = this.categorias.find(
-          //   (pac) => pac.value === obj.categoria.id
-          // );
-
-
-
-
-        }, 300);
+        setTimeout(() => {}, 300);
         this.produtos = obj;
         this.atualizarTituloEdicao();
         this.spinner.hide();
@@ -153,7 +135,7 @@ export class ProdutoCadastroComponent implements OnInit {
       .catch((erro) => {
         this.spinner.hide();
         this.erroHandler.handle(erro);
-      })
+      });
   }
 
   atualizarTituloEdicao() {

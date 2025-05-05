@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { AuthService } from '../../seguranca/auth.service';
 
 @Component({
   selector: 'app-principal',
@@ -7,22 +8,29 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   styleUrls: ['./principal.component.css'],
 })
 export class PrincipalComponent implements OnInit {
-  urlMetabase: SafeResourceUrl;
-  constructor(private sanitizer: DomSanitizer) {
-    if (window.location.hostname === 'app.labsrad.com.br') {
-      this.urlMetabase = this.sanitizer.bypassSecurityTrustResourceUrl(
-        `https://app.labsrad.com.br:3000/public/dashboard/b078ded4-9052-4091-952c-1f9d3cb4fefc`,
-      );
-    } else if (window.location.hostname === 'app-hml.connectvarejo.com.br') {
-      this.urlMetabase = this.sanitizer.bypassSecurityTrustResourceUrl(
-        `https://app-hml.labsrad.com.br:3000/public/dashboard/b078ded4-9052-4091-952c-1f9d3cb4fefc`,
-      );
-    } else {
-      this.urlMetabase = this.sanitizer.bypassSecurityTrustResourceUrl(
-        `http://localhost:3000/public/dashboard/3098c639-07f1-434d-878b-228615e51deb`,
-      );
-    }
-  }
+  urlMetabase: SafeResourceUrl | null = null;
 
-  ngOnInit() {}
+  constructor(
+    private sanitizer: DomSanitizer,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit(): void {
+    const tenantId = this.authService.getTenantId();
+    const usuarioId = this.authService.getUsuarioId();
+
+    console.log('Tenant ID:', tenantId);
+    console.log('Usuário ID:', usuarioId);
+
+    if (!tenantId || !usuarioId) {
+      console.error('Erro: tenantId ou usuarioId não encontrados', { tenantId, usuarioId });
+      return;
+    }
+
+    const dashboardId = 'd42f9258-2be6-4dc1-a6f9-38510cf84cb4';
+    const url = `https://metabase.gralha-azul.ind.br/public/dashboard/${dashboardId}?tenant=${encodeURIComponent(tenantId)}&usuario=${encodeURIComponent(usuarioId)}#hide_parameters=tenant,usuario`;
+
+    this.urlMetabase = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    console.log('URL Metabase:', url);
+  }
 }

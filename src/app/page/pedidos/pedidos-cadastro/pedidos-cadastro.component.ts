@@ -77,6 +77,11 @@ export class PedidosCadastroComponent implements OnInit {
     });
   }
 
+  buscarNomeProduto(produtoId: number): string {
+    const produto = this.produtos.find(p => p.value === produtoId);
+    return produto ? produto.label : 'Produto não encontrado';
+  }
+
   carregarPedido(id: number) {
     this.spinner.show();
     this.pedidoService
@@ -121,11 +126,11 @@ export class PedidosCadastroComponent implements OnInit {
       .catch((erro) => this.erroHandler.handle(erro));
   }
 
-  confirmarExclusao() {
+  confirmarExclusao(produto: ProdutoPedido) {
     this.confirmation.confirm({
-      message: `Tem certeza que deseja excluir: <b>${this.pedidos.nf}</b> ?`,
+      message: `Tem certeza que deseja excluir o produto <b>${produto.produtoId}</b> ?`,
       accept: () => {
-        this.excluir(this.idPedido);
+        this.excluirProdutoDoPedido(produto);
       },
       reject: (type) => {
         switch (type) {
@@ -181,19 +186,32 @@ export class PedidosCadastroComponent implements OnInit {
       .catch((erro) => this.erroHandler.handle(erro));
   }
 
-  excluir(id: any) {
-    this.produtoService
-      .excluir(id)
-      .then(() => {
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Produto',
-          detail: `${this.pedidos.nf}, excluído com sucesso!`,
-        });
-        this.router.navigate(['/pedidos']);
-      })
-      .catch((erro) => this.erroHandler.handle(erro));
+  excluirProdutoDoPedido(produto: ProdutoPedido) {
+    const index = this.pedidos.produtos.indexOf(produto);
+    if (index !== -1) {
+      this.pedidos.produtos.splice(index, 1);
+      this.produtosPedido = [...this.pedidos.produtos]; // Atualiza a lista para re-renderizar a tabela
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Produto excluído',
+        detail: `Produto removido com sucesso do pedido.`,
+      });
+    }
   }
+
+  // excluir(id: any) {
+  //   this.produtoService
+  //     .excluir(id)
+  //     .then(() => {
+  //       this.messageService.add({
+  //         severity: 'warn',
+  //         summary: 'Produto',
+  //         detail: `${this.pedidos.produtos}, excluído com sucesso!`,
+  //       });
+  //       this.router.navigate(['/pedidos']);
+  //     })
+  //     .catch((erro) => this.erroHandler.handle(erro));
+  // }
 
   adicionarPedido(form: NgForm) {
     this.salvando = true;
@@ -253,7 +271,7 @@ export class PedidosCadastroComponent implements OnInit {
           detail: 'Todos os itens foram adicionados ao pedido.',
         });
       })
-      .catch((erro) => this.erroHandler.handle(erro));
+      // .catch((erro) => this.erroHandler.handle(erro));
   }
 
   criarPedidoComProdutos(pedido: Pedidos, produtos: ProdutoPedido[]) {

@@ -10,17 +10,17 @@ const routes: Routes = [
   {
     path: '', component: ProdutosListarComponent,
     canActivate: [AuthGuard],
-    // data: {roles: ['R_EMP']}
+     data: {roles: ['R_PROD']}
   },
   {
     path: 'novo', component: ProdutoCadastroComponent,
     canActivate: [AuthGuard],
-    //  data: {roles: ['C_EMP']}
+      data: {roles: ['C_PROD']}
   },
   {
     path: ':id', component: ProdutoCadastroComponent,
     canActivate: [AuthGuard],
-    // data: {roles: ['U_EMP']}
+     data: {roles: ['U_PROD']}
 
   },
 

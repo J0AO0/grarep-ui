@@ -10,87 +10,82 @@ export class PermissaoTreeNodeService {
   permissaoTreeNode(selected: any, permissao: any) {
     for (const i of Object.keys(selected)) {
       switch (selected[i].data) {
-               // Permissão em Usuarios---------------------------------
-               case 'usuariosCriar':
-                permissao[0].permission.create = true;
-                break;
-              case 'usuariosVisualizar':
-                permissao[0].permission.read = true;
-                break;
-              case 'usuariosEditar':
-                permissao[0].permission.update = true;
-                break;
-              case 'usuariosStatus':
-                permissao[0].permission.status = true;
-                break;
-              case 'usuariosExcluir':
-                permissao[0].permission.delete = true;
-                break;
-      
-              // Permissão em Relatório-------------------------------------
-              // case 'relatoriosVisualizar':
-              //   permissao[5].permission.read = true;
-              //   break;
-      
-              // Permissão em Empresas---------------------------------
-              case 'empresasCriar':
-                permissao[1].permission.create = true;
-                break;
-              case 'empresasVisualizar':
-                permissao[1].permission.read = true;
-                break;
-              case 'empresasEditar':
-                permissao[1].permission.update = true;
-                break;
-              case 'empresasStatus':
-                permissao[1].permission.status = true;
-                break;
-              case 'empresasExcluir':
-                permissao[1].permission.delete = true;
-                break;
-      
-              case 'pedidoCriar':
-                console.log('Pedido existente')
-                permissao[3].permission.create = true;
-                console.log(permissao[3].permission.read)
-                break;
-              case 'pedidoVisualizar':
-                permissao[3].permission.read = true;
-                break;
-              case 'pedidoEditar':
-                permissao[3].permission.update = true;
-                break;
-              case 'pedidoStatus':
-                permissao[3].permission.status = true;
-                break;
-              case 'pedidoExcluir':
-                permissao[3].permission.delete = true;
-                break;
-      
-              case 'produtoCriar':
-                console.log('Produto existente')
-                permissao[4].permission.create = true;
-                console.log(permissao[4].permission.read)
-                break;
-              case 'produtoVisualizar':
-                permissao[4].permission.read = true;
-                break;
-              case 'produtoEditar':
-                permissao[4].permission.update = true;
-                break;
-              case 'produtoStatus':
-                permissao[4].permission.status = true;
-                break;
-              case 'produtoExcluir':
-                permissao[4].permission.delete = true;
-                break;
+        // Permissão em Usuarios---------------------------------
+        case 'usuariosCriar':
+          permissao[0].permission.create = true;
+          break;
+        case 'usuariosVisualizar':
+          permissao[0].permission.read = true;
+          break;
+        case 'usuariosEditar':
+          permissao[0].permission.update = true;
+          break;
+        case 'usuariosStatus':
+          permissao[0].permission.status = true;
+          break;
+        case 'usuariosExcluir':
+          permissao[0].permission.delete = true;
+          break;
+
+        // Permissão em Empresas---------------------------------
+        case 'empresasCriar':
+          permissao[1].permission.create = true;
+          break;
+        case 'empresasVisualizar':
+          permissao[1].permission.read = true;
+          break;
+        case 'empresasEditar':
+          permissao[1].permission.update = true;
+          break;
+        case 'empresasStatus':
+          permissao[1].permission.status = true;
+          break;
+        case 'empresasExcluir':
+          permissao[1].permission.delete = true;
+          break;
+
+        case 'pedidoCriar':
+          console.log('Pedido existente')
+          permissao[3].permission.create = true;
+          console.log(permissao[3].permission.read)
+          break;
+        case 'pedidoVisualizar':
+          permissao[3].permission.read = true;
+          break;
+        case 'pedidoEditar':
+          permissao[3].permission.update = true;
+          break;
+        case 'pedidoStatus':
+          permissao[3].permission.status = true;
+          break;
+        case 'pedidoExcluir':
+          permissao[3].permission.delete = true;
+          break;
+
+        case 'produtoCriar':
+          console.log('Produto existente')
+          permissao[4].permission.create = true;
+          console.log(permissao[4].permission.read)
+          break;
+        case 'produtoVisualizar':
+          permissao[4].permission.read = true;
+          break;
+        case 'produtoEditar':
+          permissao[4].permission.update = true;
+          break;
+        case 'produtoStatus':
+          permissao[4].permission.status = true;
+          break;
+        case 'produtoExcluir':
+          permissao[4].permission.delete = true;
+          break;
       }
     }
-     
   }
+
   carregarPermissoesTreeNode(permissao: any, selectedpermissao: any) {
-     // Início de Permissao de Usuarios--------------------------------------------------------------
-     if (permissao[0].permission.create !== true) {
+    // Início de Permissao de Usuarios--------------------------------------------------------------
+    if (permissao[0].permission.create !== true) {
       selectedpermissao.forEach((item, index) => {
         if (item.data === 'usuariosCriar') {
           selectedpermissao.splice(index, 1);
@@ -140,55 +135,38 @@ export class PermissaoTreeNodeService {
     }
     // Fim permissao de Usuarios -------------------------------------------------------------------
 
-    // // Início de Permissao de Relatórios------------------------------------------------
-    // if (permissao[5].permission.read !== true) {
-    //   selectedpermissao.forEach((item, index) => {
-    //     if (item.data === 'relatoriosVisualizar') {
-    //       selectedpermissao.splice(index, 1);
-    //     }
-    //   });
-    // }
-    // if (permissao[5].permission.read !== true) {
-    //   selectedpermissao.forEach((item, index) => {
-    //     if (item.data === 'relatorios') {
-    //       selectedpermissao.splice(index, 1);
-    //     }
-    //   });
-    // }
-    // // Fim permissao de Relatórios------------------------------------------------
-
     // Início de Permissao de Empresas--------------------------------------------------------------
     if (permissao[1].permission.create !== true) {
       selectedpermissao.forEach((item, index) => {
-        if (item.data === 'empresaCriar') {
+        if (item.data === 'empresasCriar') {
           selectedpermissao.splice(index, 1);
         }
       });
     }
     if (permissao[1].permission.read !== true) {
       selectedpermissao.forEach((item, index) => {
-        if (item.data === 'empresaVisualizar') {
+        if (item.data === 'empresasVisualizar') {
           selectedpermissao.splice(index, 1);
         }
       });
     }
     if (permissao[1].permission.update !== true) {
       selectedpermissao.forEach((item, index) => {
-        if (item.data === 'empresaEditar') {
+        if (item.data === 'empresasEditar') {
           selectedpermissao.splice(index, 1);
         }
       });
     }
     if (permissao[1].permission.status !== true) {
       selectedpermissao.forEach((item, index) => {
-        if (item.data === 'empresaStatus') {
+        if (item.data === 'empresasStatus') {
           selectedpermissao.splice(index, 1);
         }
       });
     }
     if (permissao[1].permission.delete !== true) {
       selectedpermissao.forEach((item, index) => {
-        if (item.data === 'empresaExcluir') {
+        if (item.data === 'empresasExcluir') {
           selectedpermissao.splice(index, 1);
         }
       });
@@ -201,7 +179,7 @@ export class PermissaoTreeNodeService {
       permissao[1].permission.delete !== true
     ) {
       selectedpermissao.forEach((item, index) => {
-        if (item.data === 'empresa') {
+        if (item.data === 'empresas') {
           selectedpermissao.splice(index, 1);
         }
       });
@@ -212,35 +190,35 @@ export class PermissaoTreeNodeService {
     if (permissao[3].permission.create !== true) {
       selectedpermissao.forEach((item, index) => {
         if (item.data === 'pedidoCriar') {
-          selectedpermissao.splice(index, 3);
+          selectedpermissao.splice(index, 1);
         }
       });
     }
     if (permissao[3].permission.read !== true) {
       selectedpermissao.forEach((item, index) => {
         if (item.data === 'pedidoVisualizar') {
-          selectedpermissao.splice(index, 3);
+          selectedpermissao.splice(index, 1);
         }
       });
     }
     if (permissao[3].permission.update !== true) {
       selectedpermissao.forEach((item, index) => {
         if (item.data === 'pedidoEditar') {
-          selectedpermissao.splice(index, 3);
+          selectedpermissao.splice(index, 1);
         }
       });
     }
     if (permissao[3].permission.status !== true) {
       selectedpermissao.forEach((item, index) => {
         if (item.data === 'pedidoStatus') {
-          selectedpermissao.splice(index, 3);
+          selectedpermissao.splice(index, 1);
         }
       });
     }
     if (permissao[3].permission.delete !== true) {
       selectedpermissao.forEach((item, index) => {
         if (item.data === 'pedidoExcluir') {
-          selectedpermissao.splice(index, 3);
+          selectedpermissao.splice(index, 1);
         }
       });
     }
@@ -253,7 +231,7 @@ export class PermissaoTreeNodeService {
     ) {
       selectedpermissao.forEach((item, index) => {
         if (item.data === 'pedido') {
-          selectedpermissao.splice(index, 3);
+          selectedpermissao.splice(index, 1);
         }
       });
     }
@@ -263,35 +241,35 @@ export class PermissaoTreeNodeService {
     if (permissao[4].permission.create !== true) {
       selectedpermissao.forEach((item, index) => {
         if (item.data === 'produtoCriar') {
-          selectedpermissao.splice(index, 4);
+          selectedpermissao.splice(index, 1);
         }
       });
     }
     if (permissao[4].permission.read !== true) {
       selectedpermissao.forEach((item, index) => {
         if (item.data === 'produtoVisualizar') {
-          selectedpermissao.splice(index, 4);
+          selectedpermissao.splice(index, 1);
         }
       });
     }
     if (permissao[4].permission.update !== true) {
       selectedpermissao.forEach((item, index) => {
         if (item.data === 'produtoEditar') {
-          selectedpermissao.splice(index, 4);
+          selectedpermissao.splice(index, 1);
         }
       });
     }
     if (permissao[4].permission.status !== true) {
       selectedpermissao.forEach((item, index) => {
         if (item.data === 'produtoStatus') {
-          selectedpermissao.splice(index, 4);
+          selectedpermissao.splice(index, 1);
         }
       });
     }
     if (permissao[4].permission.delete !== true) {
       selectedpermissao.forEach((item, index) => {
         if (item.data === 'produtoExcluir') {
-          selectedpermissao.splice(index, 4);
+          selectedpermissao.splice(index, 1);
         }
       });
     }
@@ -304,7 +282,7 @@ export class PermissaoTreeNodeService {
     ) {
       selectedpermissao.forEach((item, index) => {
         if (item.data === 'produto') {
-          selectedpermissao.splice(index, 4);
+          selectedpermissao.splice(index, 1);
         }
       });
     }

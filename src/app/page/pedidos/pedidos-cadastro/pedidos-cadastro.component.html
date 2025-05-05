@@ -57,38 +57,48 @@
 
 
       </div>
-        <p-table [value]="pedidos.produtos" [scrollable]="true" [rows]="10" paginator="true" [columns]="colsItens"
-          [showCurrentPageReport]="true" [rowHover]="true" selectionMode="single" styleClass="p-datatable-striped"
-          selectionMode="single" currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} entradas" r>
-
-          <ng-template pTemplate="header" let-columns>
-            <tr>
-              <th class="btnAcoes">&nbsp;</th>
-              <th class="btnAcoes">&nbsp;</th>
-              <th style="width: 100px;">ID</th>
-              <th style="width: 100px;">Quantidade</th>
-            </tr>
-          </ng-template>
-
-          <ng-template pTemplate="body" let-itens let-columns="columns" let-rowData let-rowIndex="rowIndex">
-            <tr [pSelectableRow]="rowData">
-              <td class="btnAcoes">
-                <button pButton pRipple type="button" class="p-button-text p-button-danger " icon="fas fa-trash"
-                  label="Excluir" pTooltip="Excluir" tooltipPosition="top" (click)="confirmarExclusao()"></button>
-              </td>
-              <td style="width: 100px;">
-                <span class="p-column-title">Acesso:</span>
-                {{rowData.idProduto}}
-              </td>
-              <td style="width: 100px;">
-                <span class="p-column-title">Exame:</span>
-                {{rowData.quantidade}}
-              </td>
-            </tr>
-            <div id="linha-horizontal"></div>
-          </ng-template>
-
-        </p-table>
+      <p-table 
+      [value]="pedidos.produtos" 
+      [scrollable]="true" 
+      [rows]="10" 
+      [paginator]="true" 
+      [columns]="colsItens"
+      [showCurrentPageReport]="true" 
+      [rowHover]="true" 
+      selectionMode="single"
+      class="p-datatable-striped" 
+      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} entradas">
+    
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th style="width: 60px;"></th>
+          <th style="width: 60px;"></th>
+          <th style="width: 150px;">ID Produto</th>
+          <th style="width: 250px;">Nome do Produto</th>
+          <th style="width: 120px;">Quantidade</th>
+        </tr>
+      </ng-template>
+    
+      <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+        <tr [pSelectableRow]="rowData">
+          <td>
+            <button pButton pRipple 
+              type="button" 
+              class="p-button-rounded p-button-danger p-button-text" 
+              icon="pi pi-trash" 
+              pTooltip="Excluir" 
+              tooltipPosition="top" 
+              (click)="confirmarExclusao(rowData)">
+            </button>
+          </td>
+          <td></td>
+          <td>{{ rowData.produtoId }}</td>
+          <td>{{ buscarNomeProduto(rowData.produtoId) }}</td>
+          <td>{{ rowData.quantidade }}</td>
+        </tr>
+      </ng-template>
+    
+    </p-table>
 
 
       
@@ -119,31 +129,42 @@
 
 <p-dialog header="PRODUTOS" styleClass="mydialog" [baseZIndex]="10000" [(visible)]="exibirForm" modal="modal"
   *ngIf="produtoPedido" closeOnEscape="true" dismissableMask="true">
+  
   <form #frmProd="ngForm" autocomplete="off" (ngSubmit)="confirmarPedido(frmProd)">
     <div class="grid mt-4">
       <div class="col-12 md:col-6">
-        <p-dropdown styleClass="dropdown" name="prtodutoSelecionado" filter="true" [autoDisplayFirst]="false"
-          [options]="produtos" [(ngModel)]="produtoPedido.produtoId" [showClear]="true"
-          [emptyFilterMessage]="messageDrop" placeholder="Selecione..." required>
+        
+        <!-- Dropdown Produto -->
+        <p-dropdown
+          styleClass="dropdown w-full"
+          name="prtodutoSelecionado"
+          filter="true"
+          [autoDisplayFirst]="false"
+          [options]="produtos"
+          [(ngModel)]="produtoPedido.produtoId"
+          [showClear]="true"
+          [emptyFilterMessage]="messageDrop"
+          placeholder="Selecione..."
+          required>
         </p-dropdown>
 
-        <div class="grid mt-3">
-          <div class="col-12 md:col-6">
-            <span>Quantidade</span>
-            <input type="number"
-                   name="quantidade"
-                   [(ngModel)]="produtoPedido.quantidade"
-                   #quantidade="ngModel"
-                   pInputText
-                   class="w-full"
-                   required
-                   min="1" />
-            
-            <!-- Validações -->
-            <app-message [control]="quantidade" error="required" text="Quantidade é obrigatória."></app-message>
-            <app-message [control]="quantidade" error="min" text="Quantidade mínima é 1."></app-message>
-          </div>
+        <!-- Input Quantidade (Abaixo alinhado) -->
+        <div class="mt-3">
+          <span>Quantidade</span>
+          <input type="number"
+            name="quantidade"
+            [(ngModel)]="produtoPedido.quantidade"
+            #quantidade="ngModel"
+            pInputText
+            class="width: 150px"
+            required
+            min="1" />
+          
+          <!-- Validações -->
+          <app-message [control]="quantidade" error="required" text="Quantidade é obrigatória."></app-message>
+          <app-message [control]="quantidade" error="min" text="Quantidade mínima é 1."></app-message>
         </div>
+
       </div>
     </div>
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FiltrosCategorias, FiltroUsuarios } from '../../models/filtros.model';
+import { FiltroUsuarios } from '../../models/filtros.model';
 
 
 @Injectable({

@@ -48,16 +48,17 @@ export class PedidosService {
       .then(() => {
         console.log('Produtos adicionados ao pedido com sucesso');
       })
-      .catch(error => {
-        console.error('Erro ao adicionar produtos ao pedido:', error);
-        console.log('Detalhes do erro:', error.error); // Exibe a mensagem do servidor
-        throw error;
-      });
+      // .catch(error => {
+      //   console.error('Erro ao adicionar produtos ao pedido:', error);
+      //   console.log('Detalhes do erro:', error.error); // Exibe a mensagem do servidor
+      //   throw error;
+      // });
   }
 
   listar(): Promise<any> {
     return firstValueFrom(this.http.get(`${this.pedidoUrl}`)).then(
       (response) => {
+        console.log('Dados recebidos do backend:', response); // Adicionar log
         const obj = response as any[];
         this.convertStringDate(obj);
         return obj;

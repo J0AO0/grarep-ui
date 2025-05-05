@@ -21,6 +21,12 @@ import { Regex } from 'src/app/core/validators/regex';
 import { EmpresasService } from '../../empresas/empresas.service';
 import { UsuariosService } from '../usuarios.service';
 
+// Interface estendida para adicionar propriedades específicas do frontend
+interface EmpresaComAcesso extends Empresas {
+  empresasusuario?: boolean;
+  empresapadrao?: boolean;
+}
+
 @Component({
   selector: 'app-usuario-editar',
   templateUrl: './usuario-editar.component.html',
@@ -34,7 +40,7 @@ export class UsuarioEditarComponent implements OnInit, AfterViewInit {
   selectedValues: string[] = [];
   regex = new Regex();
   usuario = new Usuarios();
-  empresas = [];
+  empresas: EmpresaComAcesso[] = [];
   tiposperfil = [];
   empresa: Empresas[];
   selectedEmpresa: Empresas[];
@@ -66,7 +72,6 @@ export class UsuarioEditarComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.criarTreeNodePermissoes();
-    // this.expandAll();
     this.idUser = this.route.snapshot.params['id'];
     this.title.setTitle('Cadastro de Usuário');
 
@@ -78,23 +83,25 @@ export class UsuarioEditarComponent implements OnInit, AfterViewInit {
       { field: 'cidade', header: 'Cidade', width: '150px' },
       { field: 'uf', header: 'Estado', width: '100px' },
     ];
-    // this.carregarEmpresas();
   }
+
   ngAfterViewInit(): void {
     if (this.idUser) {
       this.spinner.show();
       this.carregarPermissoes(this.idUser);
       this.carregarUsuario(this.idUser);
+      this.carregarEmpresas(this.idUser);
     } else {
       this.usuario.status = true;
-      this.carregarUsuario(3);
+      this.carregarEmpresas();
     }
   }
-  expandAll(){
-    this.permission.forEach( node => {
-        this.expandRecursive(node, true);
-    } );
-}
+
+  expandAll() {
+    this.permission.forEach((node) => {
+      this.expandRecursive(node, true);
+    });
+  }
 
   carregarPermissoesAlterar(id: number) {
     this.salvando = true;
@@ -128,6 +135,7 @@ export class UsuarioEditarComponent implements OnInit, AfterViewInit {
   criarTreeNodePermissoes() {
     this.permission = this.treeNodeService.criarTreeNodePermissoes();
   }
+
   carregarPermissoes(id: number) {
     this.usuarioService
       .listarPermissoes(id)
@@ -137,6 +145,7 @@ export class UsuarioEditarComponent implements OnInit, AfterViewInit {
       })
       .catch((erro) => this.errorHandler.handle(erro));
   }
+
   atribuirPermissoes() {
     this.selectedPermission = [];
     this.permission.forEach((node) => {
@@ -144,12 +153,14 @@ export class UsuarioEditarComponent implements OnInit, AfterViewInit {
     });
     this.verificarPermissoesDoUsuario();
   }
+
   verificarPermissoesDoUsuario() {
     this.permissaoTreeNode.carregarPermissoesTreeNode(
       this.permissao,
       this.selectedPermission
     );
   }
+
   flattenTree(node: TreeNode) {
     this.selectedPermission.push(node);
     if (node.children) {
@@ -158,12 +169,12 @@ export class UsuarioEditarComponent implements OnInit, AfterViewInit {
       });
     }
   }
+
   private expandRecursive(node: TreeNode, isExpand: boolean) {
     node.expanded = isExpand;
     if (node.children) {
       node.children.forEach((childNode) => {
         this.expandRecursive(childNode, isExpand);
-        // this.selectedPermission.push(childNode);
       });
     }
   }
@@ -171,8 +182,8 @@ export class UsuarioEditarComponent implements OnInit, AfterViewInit {
   get editando() {
     return Boolean(this.usuario.id);
   }
+
   salvar(form: NgForm) {
-    // this.usuario.permissoes = this.permissao;
     this.atualizarUsuario(form);
   }
 
@@ -182,9 +193,31 @@ export class UsuarioEditarComponent implements OnInit, AfterViewInit {
 
     for (const i of Object.keys(this.empresas)) {
       if (this.empresas[i].empresasusuario === true) {
-        this.usuario.empresas.push(this.empresas[i]);
+        const empresa: Empresas = {
+          id: this.empresas[i].id,
+          cpfoucnpj: this.empresas[i].cpfoucnpj,
+          razaosocial: this.empresas[i].razaosocial,
+          naturezapessoa: this.empresas[i].naturezapessoa,
+          cep: this.empresas[i].cep,
+          logradouro: this.empresas[i].logradouro,
+          numero: this.empresas[i].numero,
+          complemento: this.empresas[i].complemento,
+          bairro: this.empresas[i].bairro,
+          cidade: this.empresas[i].cidade,
+          uf: this.empresas[i].uf,
+          nomecontato: this.empresas[i].nomecontato,
+          telefone: this.empresas[i].telefone,
+          whats: this.empresas[i].whats,
+          email: this.empresas[i].email,
+          valor: this.empresas[i].valor,
+          datagravacao: this.empresas[i].datagravacao,
+          emailusuario: this.empresas[i].emailusuario,
+          status: this.empresas[i].status,
+        };
+        this.usuario.empresas.push(empresa);
       }
       if (this.empresas[i].empresapadrao === true) {
+        this.usuario.idEmpresaativa = this.empresas[i].id;
         chave = chave + 1;
       }
     }
@@ -198,15 +231,16 @@ export class UsuarioEditarComponent implements OnInit, AfterViewInit {
       this.verificarPermissoes();
     }
   }
+
   verificarPermissoes() {
     this.carregarPermissoesAlterar(3);
   }
+
   carregarUsuario(id: number) {
     this.usuarioService
       .buscarPorId(id)
       .then((usuario) => {
         this.usuario = usuario;
-        this.empresas = usuario.empresas;
         this.atualizarTituloEdicao();
         this.spinner.hide();
       })
@@ -215,17 +249,44 @@ export class UsuarioEditarComponent implements OnInit, AfterViewInit {
         this.errorHandler.handle(erro);
       });
   }
-  carregarEmpresas() {
+
+  carregarEmpresas(idUsuario?: number) {
     this.loading = true;
-    return this.empresaService.listar().then((obj) => {
-      this.empresas = obj;
+    return this.empresaService.listar().then((empresas) => {
+      this.empresas = empresas.map((empresa: Empresas) => {
+        return {
+          ...empresa,
+          empresasusuario: false,
+          empresapadrao: false,
+        } as EmpresaComAcesso;
+      });
+
+      if (idUsuario && this.usuario.empresas) {
+        this.empresas = this.empresas.map((empresa: EmpresaComAcesso) => {
+          const empresaUsuario = this.usuario.empresas.find(
+            (e) => e.id === empresa.id
+          );
+          if (empresaUsuario) {
+            return {
+              ...empresa,
+              empresasusuario: true,
+              empresapadrao: this.usuario.idEmpresaativa === empresa.id,
+            };
+          }
+          return empresa;
+        });
+      }
+
       this.loading = false;
+    }).catch((erro) => {
+      this.loading = false;
+      this.errorHandler.handle(erro);
     });
   }
+
   alterar(form: NgForm) {
     form.reset();
     setTimeout(
-      // tslint:disable-next-line: space-before-function-paren
       function () {
         this.rep = new Usuarios();
       }.bind(this),
@@ -238,6 +299,7 @@ export class UsuarioEditarComponent implements OnInit, AfterViewInit {
   atualizarTituloEdicao() {
     this.title.setTitle(`Edição de Usuário: ${this.usuario.nome}`);
   }
+
   confirmarExclusao() {
     this.confirmation.confirm({
       message: `Tem certeza que deseja excluir: <b>${this.usuario.nome}</b> ?`,
@@ -264,6 +326,7 @@ export class UsuarioEditarComponent implements OnInit, AfterViewInit {
       },
     });
   }
+
   excluir(id: any) {
     this.usuarioService
       .excluir(id)

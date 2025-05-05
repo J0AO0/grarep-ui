@@ -49,7 +49,7 @@ body {
   font-size: 100%;
   color: #6c757d;
   margin: 0;
-  background-color: #5790ab;
+  background-color: #45423D;
 }
 
 
@@ -839,9 +839,9 @@ p-inputnumber,
 }
 
 .p-button-primary {
-  background: #5790ab;
+  background: #45423D;
   color: #ffffff;
-  border-color: #5790ab;
+  border-color: #45423D;
 }
 
 .p-button:enabled:hover {
@@ -884,7 +884,7 @@ p-inputnumber,
 }
 
 .p-button.p-button-outlined {
-  color: #5790ab;
+  color: #45423D;
 }
 
 .p-overlay-content {
@@ -894,7 +894,7 @@ p-inputnumber,
 }
 
 .p-overlaypanel .p-overlaypanel-close {
-  background: #5790ab;
+  background: #45423D;
 }
 
 .p-overlaypanel .p-overlaypanel-close:enabled:hover {
@@ -908,7 +908,7 @@ p-inputnumber,
 .p-button.p-button-info,
 .p-buttonset.p-button-info>.p-button,
 .p-splitbutton.p-button-info>.p-button {
-  background: #5790ab;
+  background: #45423D;
   border: none;
   box-shadow: none;
 }
@@ -916,7 +916,7 @@ p-inputnumber,
 .p-button.p-button-info:enabled:hover,
 .p-buttonset.p-button-info>.p-button:enabled:hover,
 .p-splitbutton.p-button-info>.p-button:enabled:hover {
-  background: #487eb0;
+  background: #6B6557;
 }
 
 .p-button.p-button-info:enabled:focus,
@@ -926,13 +926,13 @@ p-inputnumber,
 }
 
 .p-button {
-  background: #5790ab;
+  background: #45423D;
   border-radius: orem;
   border: none;
 }
 
 .p-button:enabled:hover {
-  background: #487eb0;
+  background: #6B6557;
   ;
 }
 
@@ -941,11 +941,11 @@ p-inputnumber,
 }
 
 .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
-  color: #5790ab;
+  color: #45423D;
 }
 
 .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
-  border-color: #5790ab;
+  border-color: #45423D;
 }
 
 .p-tabview .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus {
@@ -953,35 +953,35 @@ p-inputnumber,
 }
 
 .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
-  background: #5790ab;
+  background: #45423D;
 }
 
 .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
-  background: #5790ab;
+  background: #45423D;
 }
 
 .p-tag {
-  background: #5790ab;
+  background: #45423D;
 }
 
 .p-inputtext:enabled:hover {
-  border-color: #5790ab;
+  border-color: #45423D;
 }
 
 .p-inputtext:enabled:focus {
-  box-shadow: 0 0 0 0.2rem #5790ab;
-  border-color: #5790ab;
+  box-shadow: 0 0 0 0.2rem #45423D;
+  border-color: #45423D;
 }
 
 .p-selectbutton .p-button.p-highlight {
-  background: #5790ab;
-  border-color: #5790ab;
+  background: #45423D;
+  border-color: #45423D;
   color: #fff;
 }
 
 .p-selectbutton .p-button.p-highlight:hover {
-  background: #487eb0;
-  border-color: #487eb0;
+  background: #6B6557;
+  border-color: #6B6557;
   color: #fff;
 }
 
@@ -996,17 +996,17 @@ p-inputnumber,
 .p-button.p-button-success:enabled:hover,
 .p-buttonset.p-button-success>.p-button:enabled:hover,
 .p-splitbutton.p-button-success>.p-button:enabled:hover {
-  background: #487eb0;
-  border-color: #487eb0;
+  background: #6B6557;
+  border-color: #6B6557;
 }
 
 .p-datatable .p-datatable-tbody>tr.p-highlight {
-  background: #487eb0;
+  background: #6B6557;
   color: #ffffff;
 }
 
 .p-datatable.p-datatable-striped .p-datatable-tbody>tr:nth-child(even).p-highlight {
-  background: #487eb0;
+  background: #6B6557;
   color: #ffffff;
 }
 
@@ -1019,13 +1019,13 @@ p-inputnumber,
 .p-buttonset.p-button-secondary>.p-button.p-button-text,
 .p-splitbutton.p-button-secondary>.p-button.p-button-text {
   background-color: transparent;
-  color: #5790ab;
+  color: #45423D;
   border-color: transparent;
 }
 
 .p-radiobutton .p-radiobutton-box.p-highlight {
-  border-color: #5790ab;
-  background: #5790ab;
+  border-color: #45423D;
+  background: #45423D;
 }
 
 .p-radiobutton .p-radiobutton-box:not(.p-disabled).p-focus {
@@ -1034,12 +1034,12 @@ p-inputnumber,
 
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight {
   color: #fff;
-  background: #487eb0;
+  background: #6B6557;
 }
 
 .p-checkbox .p-checkbox-box.p-highlight {
-  border-color: #5790ab;
-  background: #5790ab;
+  border-color: #45423D;
+  background: #45423D;
 }
 
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item:focus {
@@ -1047,11 +1047,11 @@ p-inputnumber,
 }
 
 .p-multiselect.p-multiselect-chip .p-multiselect-token {
-  background: #5790ab;
+  background: #45423D;
 }
 
 .p-multiselect.p-multiselect-chip .p-multiselect-token {
-  background: #5790ab;
+  background: #45423D;
   color: #ffffff;
 }
 
@@ -1064,7 +1064,7 @@ p-inputnumber,
 
 .p-tabview .p-tabview-nav-btn.p-link {
   background: #ffffff;
-  color: #5790ab;
+  color: #45423D;
   width: 3rem;
   box-shadow: none;
 }

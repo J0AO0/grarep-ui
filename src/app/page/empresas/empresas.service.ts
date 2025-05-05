@@ -33,7 +33,7 @@ export class EmpresasService {
 
   //TODO EMPRESA PADRAO
   listarEmpresaPadrao(): Promise<any> {
-    return firstValueFrom(this.http.get(`${this.empresaUrl}/empresapadrao`)).then(
+    return firstValueFrom(this.http.get(`${this.empresaUrl}/usuarios`)).then(
       (response) => {
         const obj = response as any[];
         this.convertStringDate(obj);

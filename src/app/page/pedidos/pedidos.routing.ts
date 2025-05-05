@@ -12,20 +12,20 @@ const routes: Routes = [
   {
     path: '',
     component: PedidosListaComponent,
-    //canActivate: [AuthGuard],
-    data: {roles: ['pedidos']}
+   // canActivate: [AuthGuard],
+    data: {roles: ['R_PED']}
   },
   {
     path: 'novo',
     component: PedidosCadastroComponent,
-    //canActivate: [AuthGuard],
-    data: {roles: ['pedidos']}
+   // canActivate: [AuthGuard],
+    data: {roles: ['C_PED']}
   },
   {
     path: ':id',
     component: PedidosCadastroComponent,
-    //canActivate: [AuthGuard],
-    data: {roles: ['pedidos']}
+   // canActivate: [AuthGuard],
+    data: {roles: ['U_PED']}
   } 
 
 

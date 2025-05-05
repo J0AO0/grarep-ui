@@ -126,7 +126,20 @@ export class TreeNodePermissoesService {
 //                key: 'pedidosStatus',
 //              },
             ],
-          }
+          },
+
+          {
+            label: 'Relatórios',
+            data: 'relatorios',
+            key: 'relatorios',
+            children: [
+              {
+                label: 'Visualizar',
+                data: 'relatoriosVisualizar',
+                key: 'relatoriosVisualizar',
+              }
+            ],
+          },
         ]
       }
     ];
